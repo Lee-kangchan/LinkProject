@@ -3,7 +3,7 @@ import { Container } from 'react-bootstrap'
 
 const Footer = () => {
     return (
-        <footer>
+        <footer bg="light" expand="lg" >
                <Container>
                         <div style={{textAlign:"center"}}>
                                 &copy; 2021 Linc App. All Rights Reserved
