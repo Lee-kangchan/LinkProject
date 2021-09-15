@@ -9,7 +9,7 @@ import './index.css';
 import LinkCard from "./component/LinkCard";
 
 function App(){
-  return <Layout bg="light" expand="lg" >
+  return <Layout bg="light" className="Container" expand="lg" >
     <Row xs={1} md={5} className="g-4">
         <LinkCard/>
         <LinkCard/>
