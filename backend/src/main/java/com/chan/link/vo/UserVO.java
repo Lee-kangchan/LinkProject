@@ -25,6 +25,36 @@ public class UserVO {
     private Date create_at; // 유저 생성일
     private Date modified_at; // 유저 정보 변경일
 
+
+    public UserVO() {
+    }
+
+    public UserVO (String email, String pw, String gender, String name, String phone, String nickname){
+        this.email = email;
+        this.pw = pw;
+        this.gender = gender;
+        this. name = name;
+        this.phone = phone;
+        this.nickname =nickname;
+    }
+    public UserVO(Long seq, String email, String pw, String gender, String name, String phone, String nickname, Date create_at, Date modified_at) {
+        this.seq = seq;
+        this.email = email;
+        this.pw = pw;
+        this.gender = gender;
+        this.name = name;
+        this.phone = phone;
+        this.nickname = nickname;
+        this.create_at = create_at;
+        this.modified_at = modified_at;
+    }
+
+    public UserVO(String email, String pw) {
+        this.email = email;
+        this.pw = pw;
+    }
+
+
     public Long getSeq() {
         return seq;
     }
