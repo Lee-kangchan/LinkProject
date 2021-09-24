@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity(name= "USER")
@@ -22,11 +23,13 @@ public class UserVO {
     private String name; // 유저 이름
     private String phone; // 유저 전화번호
     private String nickname; // 유저 닉네임
-    private Date create_at; // 유저 생성일
-    private Date modified_at; // 유저 정보 변경일
+    private LocalDateTime create_at; // 유저 생성일
+    private LocalDateTime modified_at; // 유저 정보 변경일
 
 
     public UserVO() {
+        this.create_at = LocalDateTime.now();
+        this.modified_at = LocalDateTime.now();
     }
 
     public UserVO (String email, String pw, String gender, String name, String phone, String nickname){
@@ -36,8 +39,10 @@ public class UserVO {
         this. name = name;
         this.phone = phone;
         this.nickname =nickname;
+        this.create_at = LocalDateTime.now();
+        this.modified_at = LocalDateTime.now();
     }
-    public UserVO(Long seq, String email, String pw, String gender, String name, String phone, String nickname, Date create_at, Date modified_at) {
+    public UserVO(Long seq, String email, String pw, String gender, String name, String phone, String nickname, LocalDateTime create_at, LocalDateTime modified_at) {
         this.seq = seq;
         this.email = email;
         this.pw = pw;
@@ -47,6 +52,8 @@ public class UserVO {
         this.nickname = nickname;
         this.create_at = create_at;
         this.modified_at = modified_at;
+        this.create_at = LocalDateTime.now();
+        this.modified_at = LocalDateTime.now();
     }
 
     public UserVO(String email, String pw) {
@@ -111,19 +118,19 @@ public class UserVO {
         this.nickname = nickname;
     }
 
-    public Date getCreate_at() {
+    public LocalDateTime getCreate_at() {
         return create_at;
     }
 
-    public void setCreate_at(Date create_at) {
+    public void setCreate_at(LocalDateTime create_at) {
         this.create_at = create_at;
     }
 
-    public Date getModified_at() {
+    public LocalDateTime getModified_at() {
         return modified_at;
     }
 
-    public void setModified_at(Date modified_at) {
+    public void setModified_at(LocalDateTime modified_at) {
         this.modified_at = modified_at;
     }
 }

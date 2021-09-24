@@ -15,10 +15,16 @@ public class UserTest {
     void contextLoads() {
     }
 
+
+    // null을 해야 처리 될까 ? isEmpty로 처리를 해야 될까?
     @Test
-    void UserVOisEmptyTest() {
+    void isEmptyTest() {
         UserVO vo = new UserVO("abc1234", "password");
         UserVO vo2 = new UserVO();
-        
+    }
+
+    @Test
+    void bindingObject(){
+
     }
 }

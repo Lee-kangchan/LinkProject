@@ -2,6 +2,8 @@ package com.chan.link.service;
 
 import com.chan.link.repository.UserRepository;
 import com.chan.link.vo.UserVO;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import java.util.List;
 
 //service에 각 역할 정리
 @Service
+@Log4j2
 public class UserServiceImpl implements UserService {
 
 
@@ -26,27 +29,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserVO loginService(String email, String pw) {
-        UserVO userVO = new UserVO();
+    public UserVO loginService(UserVO userVO) {
+        UserVO login = new UserVO();
         // email 와 pw가 일치하는 db목록 들고오기
-        userVO = userRepository.findByEmailAndPw(email, pw);
+        login = userRepository.findByEmailAndPw(userVO.getEmail(), userVO.getPw());
 
-        if(userVO.getEmail().isEmpty()){
+        if(login.getEmail().isEmpty()){
             return null;
         }else{
-            return userVO;
+            return login;
         }
     }
 
 
     @Override
-    public boolean signService(String email, String pw, String name, String gender, String phone, String nickname) {
-        UserVO userVO = new UserVO();
-        userVO = userRepository.findByEmailAndPw(email, pw);
+    public boolean signService(UserVO userVO) {
+        UserVO sign = new UserVO();
+        sign = userRepository.findByEmailAndPw(userVO.getEmail(), userVO.getPw());
 
         // Service 처리
-        if(userVO.getEmail().isEmpty()){ // email이 존재하지 않으면 회원가입 처리
-            userVO = new UserVO(email, pw, name, gender, phone, nickname);
+        if(sign == null){ // email이 존재하지 않으면 회원가입 처리
             userRepository.save(userVO);
             return true;
         } else{ // 아니면 회원가입 안됨
