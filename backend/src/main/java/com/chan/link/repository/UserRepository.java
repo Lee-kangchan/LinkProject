@@ -7,10 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserVO, Long> {
     UserVO findByEmailAndPw(String email, String pw); // email and password 검증
-    UserVO findByEmail(String email); // email 체크
-
+    Optional<UserVO> findByEmail(String email); // email 체크
+    boolean existsByEmail(String email);
 }

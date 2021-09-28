@@ -1,11 +1,14 @@
 package com.chan.link.service;
 
 import com.chan.link.repository.UserRepository;
+import com.chan.link.util.SecurityUtil;
 import com.chan.link.vo.UserVO;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +16,10 @@ import java.util.List;
 
 //service에 각 역할 정리
 @Service
+@RequiredArgsConstructor
 @Log4j2
 public class UserServiceImpl implements UserService {
 
-
-    @Autowired
     UserRepository userRepository;
 
     @Override
@@ -60,8 +62,8 @@ public class UserServiceImpl implements UserService {
     public boolean emailCheck(String email) {
         UserVO userVO = new UserVO();
         userRepository.findByEmail(email);
-        userVO = userRepository.findByEmail(email);
-
+        userVO = userRepository.findByEmail(email)
+                .get();
         // Service 처리
         if(userVO.getEmail().isEmpty()){ // email이 존재하지 않으면 회원가입 처리
             userRepository.save(userVO);
@@ -69,5 +71,17 @@ public class UserServiceImpl implements UserService {
         } else{ // 아니면 회원가입 안됨
             return false;
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserVO getMyInfo() {
+        return userRepository.findByEmail(SecurityUtil.getCurrentMemberId())
+
+    }
+
+    @Override
+    public UserVO getUserInfo(String email) {
+        return null;
     }
 }

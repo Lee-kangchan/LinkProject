@@ -1,16 +1,12 @@
 package com.chan.link.vo;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity(name= "USER")
 public class UserVO {
@@ -23,6 +19,7 @@ public class UserVO {
     private String name; // 유저 이름
     private String phone; // 유저 전화번호
     private String nickname; // 유저 닉네임
+    private Authority authority; // 유저 권한
     private LocalDateTime create_at; // 유저 생성일
     private LocalDateTime modified_at; // 유저 정보 변경일
 
@@ -32,6 +29,7 @@ public class UserVO {
         this.modified_at = LocalDateTime.now();
     }
 
+    @Builder
     public UserVO (String email, String pw, String gender, String name, String phone, String nickname){
         this.email = email;
         this.pw = pw;
@@ -39,6 +37,7 @@ public class UserVO {
         this. name = name;
         this.phone = phone;
         this.nickname =nickname;
+        this.authority = Authority.ROLE_USER;
         this.create_at = LocalDateTime.now();
         this.modified_at = LocalDateTime.now();
     }
@@ -50,12 +49,12 @@ public class UserVO {
         this.name = name;
         this.phone = phone;
         this.nickname = nickname;
-        this.create_at = create_at;
-        this.modified_at = modified_at;
+        this.authority = Authority.ROLE_USER;
         this.create_at = LocalDateTime.now();
         this.modified_at = LocalDateTime.now();
     }
 
+    @Builder
     public UserVO(String email, String pw) {
         this.email = email;
         this.pw = pw;

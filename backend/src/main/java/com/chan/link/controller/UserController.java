@@ -32,11 +32,26 @@ public class UserController {
         return response;
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<UserVO> getUserInfo(){
+        return ResponseEntity.ok(userService.getMyInfo());
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<UserVO> getUserInfo(@PathVariable String email){
+        return ResponseEntity.ok(userService.getUserInfo(email));
+    }
+
     @PostMapping(value= "/sign")
-    public ResponseEntity<Boolean> userSign(@RequestBody UserVO userVO){
-        log.info(userVO.getEmail());
-        HttpHeaders httpHeaders = new HttpHeaders();
-        return new ResponseEntity(userService.signService(userVO),httpHeaders,HttpStatus.OK);
+    public ResponseEntity<Boolean> userSign(@RequestBody UserVO userVO) {
+        try {
+            log.info(userVO.getEmail());
+            HttpHeaders httpHeaders = new HttpHeaders();
+            return new ResponseEntity(userService.signService(userVO), httpHeaders, HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping(value="login")
@@ -44,6 +59,7 @@ public class UserController {
         try {
             HttpHeaders httpHeaders = new HttpHeaders();
             ResponseEntity<Boolean> response = new ResponseEntity(userService.loginService(userVO), httpHeaders, HttpStatus.OK);
+
             return response;
         }
         catch(Exception e){
