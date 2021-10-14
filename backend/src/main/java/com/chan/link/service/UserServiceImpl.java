@@ -76,11 +76,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserVO getMyInfo() {
-        return userRepository.findByEmail(SecurityUtil.getCurrentMemberId())
-
+        return null;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserVO getUserInfo(String email) {
         return null;
     }

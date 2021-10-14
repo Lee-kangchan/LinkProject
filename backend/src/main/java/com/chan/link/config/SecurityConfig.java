@@ -1,12 +1,12 @@
 package com.chan.link.config;
 
-import com.chan.link.component.JwtProvider;
-import com.chan.link.handler.JwtAcessDenieHandler;
-import com.chan.link.handler.JwtAuthenticationEntryPoint;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import com.chan.link.jwt.JwtAccessDeniedHandler;
+import com.chan.link.jwt.JwtAuthenticationEntryPoint;
+import com.chan.link.jwt.JwtSecurityConfig;
+import com.chan.link.jwt.TokenProvider;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,49 +16,54 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableWebSecurity
-@RequiredArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true) // @PreAuthorize 어노테이션을 메소드단위로 추가하기 위해서
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final JwtProvider jwtProvider;
+
+    private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final JwtAcessDenieHandler jwtAcessDenieHandler;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
+    public SecurityConfig(TokenProvider tokenProvider, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, JwtAccessDeniedHandler jwtAccessDeniedHandler){
+        this.tokenProvider = tokenProvider;
+        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+    }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
-    //해당 api는 무시하기
     @Override
-    public void configure(WebSecurity web){
-        web.ignoring().antMatchers("/favicon.ico");
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**", "/favicon.ico");
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception{
-        //CSRF 설정 Disable
-        http.csrf().disable()
-                .exceptionHandling() //exception handling 할 때 우리가 만들 클래스를 추가
+    public void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable() // token 방식이여서 csrf 차단
+
+                .exceptionHandling() // exception 핸들링
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .accessDeniedHandler(jwtAcessDenieHandler)
-                .and()
+                .accessDeniedHandler(jwtAccessDeniedHandler)
+
+                .and() // h2 console 설정
                 .headers()
                 .frameOptions()
                 .sameOrigin()
 
-                //시큐리티는 기본적으로 세션 사용
-                // 세션을 사용하지 않기 때문에 세션 설정을 Stateless 로 설정 -> JWT 유효시간
-                .and()
+                .and() // 세션 사용 X
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-                // 로그인, 회원가입 API 는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
                 .and()
                 .authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/user/*").permitAll()
                 .anyRequest().authenticated()
 
-                //JwtFilter 를 addFilterBefore 로 등록했던 JwtSecurityConfig 클래스를 적용
                 .and()
-                .apply(new JwtSecurityConfig(jwtProvider));
+                .apply(new JwtSecurityConfig(tokenProvider));
+        ;
     }
 }

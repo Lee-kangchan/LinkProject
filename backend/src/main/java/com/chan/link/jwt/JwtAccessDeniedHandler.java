@@ -1,4 +1,4 @@
-package com.chan.link.handler;
+package com.chan.link.jwt;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -10,10 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class JwtAcessDenieHandler implements AccessDeniedHandler {
+//필요한 권한이 존재하지 않는 경우에 403 Forbidden 에러를 리턴
+public class JwtAccessDeniedHandler implements AccessDeniedHandler {
+
     @Override
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
-        //필요한 권한이 없이 접근하려 할때 403에러
         httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
     }
 }
