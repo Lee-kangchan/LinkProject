@@ -16,6 +16,7 @@ public interface UserRepository extends JpaRepository<UserVO, Long> {
     Optional<UserVO> findByEmail(String email); // email 체크
     boolean existsByEmail(String email);
 
-    @EntityGraph(attributePaths = "authorities")
+    @EntityGraph(attributePaths = "authorities")  // EAGER 조회
     Optional<UserVO> findOneWithAuthoritiesByEmail(String email);
+
 }

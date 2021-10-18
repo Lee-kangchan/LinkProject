@@ -19,5 +19,14 @@ public class SignDto {
     private String pw;
 
     @NotNull
+    private String phone;
+
+    @NotNull
+    private String name;
+
+    @NotNull
+    private String gender;
+
+    @NotNull
     private String nickname;
 }

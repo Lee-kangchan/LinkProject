@@ -1,32 +1,48 @@
 package com.chan.link.service;
 
+import com.chan.link.dto.SignDto;
+import com.chan.link.entity.Authority;
 import com.chan.link.repository.UserRepository;
 import com.chan.link.util.SecurityUtil;
 import com.chan.link.vo.UserVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 //service에 각 역할 정리
-@Service
+@Service("UserService")
 @RequiredArgsConstructor
-@Log4j2
-public class UserServiceImpl implements UserService {
+@Slf4j
+public class UserServiceImpl implements UserService{
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Override
     public List<UserVO> TestUserAll() {
         List<UserVO> listUserVO = new ArrayList<>();
         // 모든 user정보를 불러온다 -> forEach로 list에 하나하나 값을 하나 씩 넣는다
-        userRepository.findAll().forEach(e-> listUserVO.add(e) );
+        userRepository.findAll().forEach(e-> {
+            log.info(e.toString());
+            listUserVO.add(e);
+        } );
         return listUserVO;
     }
 
@@ -45,17 +61,25 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public boolean signService(UserVO userVO) {
-        UserVO sign = new UserVO();
-        sign = userRepository.findByEmailAndPw(userVO.getEmail(), userVO.getPw());
-
-        // Service 처리
-        if(sign == null){ // email이 존재하지 않으면 회원가입 처리
-            userRepository.save(userVO);
-            return true;
-        } else{ // 아니면 회원가입 안됨
-            return false;
+    public UserVO signService(SignDto signDto) {
+        if(userRepository.findOneWithAuthoritiesByEmail(signDto.getEmail()).orElse(null) != null){
+            throw new RuntimeException("이미 가입되어 있는 유저입니다.");
         }
+        LocalDateTime dateTime = LocalDateTime.now();
+        Authority authority = Authority.builder().authority_name("ROLE_USER").build();
+
+        UserVO user = UserVO.builder().email(signDto.getEmail())
+                .pw(passwordEncoder.encode(signDto.getPw()))
+                .gender(signDto.getGender())
+                .name(signDto.getName())
+                .phone(signDto.getPhone())
+                .nickname(signDto.getNickname())
+                .authorities(Collections.singleton(authority))
+                .create_at(dateTime)
+                .modified_at(dateTime)
+                .activated(true)
+                .build();
+        return userRepository.save(user);
     }
 
     @Override
@@ -75,13 +99,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserVO getMyInfo() {
-        return null;
+    public Optional<UserVO> getMyInfo() {
+        return SecurityUtil.getCurrentMemberId().flatMap(userRepository::findOneWithAuthoritiesByEmail);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public UserVO getUserInfo(String email) {
-        return null;
+    public Optional<UserVO> getUserInfo(String email) {
+        return userRepository.findOneWithAuthoritiesByEmail(email);
     }
 }

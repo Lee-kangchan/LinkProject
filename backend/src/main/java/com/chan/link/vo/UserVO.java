@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@Table(name = "user")
+@Table(name = "USER")
 @Getter
 @Setter
 @Builder
@@ -47,7 +47,7 @@ public class UserVO {
             joinColumns = {@JoinColumn(name= "user_seq", referencedColumnName = "seq")},
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName =  "authority_name")}
     )
-    private Set<Authority> authority;
+    private Set<Authority> authorities;
 
 
 }
