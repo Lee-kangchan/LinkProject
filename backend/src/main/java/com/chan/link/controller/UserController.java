@@ -69,8 +69,10 @@ public class UserController {
     }
 
     @GetMapping("/")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<UserVO> getMyUserInfo(){
+        log.info("getMyInfo : " );
+
         try {
             return ResponseEntity.ok(userService.getMyInfo().get());
         }catch (Exception e){
@@ -79,7 +81,7 @@ public class UserController {
     }
 
     @GetMapping("/{email}/")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<UserVO> getUserInfo(@PathVariable String email){
         log.info("getUserInfo : " + email);
         try {
