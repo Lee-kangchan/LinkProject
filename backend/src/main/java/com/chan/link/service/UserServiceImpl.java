@@ -1,6 +1,7 @@
 package com.chan.link.service;
 
 import com.chan.link.dto.SignDto;
+import com.chan.link.dto.UserUpdateDto;
 import com.chan.link.entity.Authority;
 import com.chan.link.repository.UserRepository;
 import com.chan.link.util.SecurityUtil;
@@ -78,6 +79,20 @@ public class UserServiceImpl implements UserService{
                 .create_at(dateTime)
                 .modified_at(dateTime)
                 .activated(true)
+                .build();
+        return userRepository.save(user);
+    }
+
+    @Override
+    public UserVO userUpdateService(UserUpdateDto userUpdateDto, String email) {
+        LocalDateTime dateTime = LocalDateTime.now();
+        UserVO user = userRepository.findByEmail(email).get();
+
+        user = user.builder().pw(passwordEncoder.encode(userUpdateDto.getPw()))
+                .name(userUpdateDto.getName())
+                .phone(userUpdateDto.getPhone())
+                .nickname(userUpdateDto.getNickname())
+                .modified_at(dateTime)
                 .build();
         return userRepository.save(user);
     }

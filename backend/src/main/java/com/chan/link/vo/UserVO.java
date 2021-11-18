@@ -3,6 +3,7 @@ package com.chan.link.vo;
 import com.chan.link.entity.Authority;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@DynamicUpdate // 변경한 필드만 대응
 public class UserVO {
     @JsonIgnore
     @Id

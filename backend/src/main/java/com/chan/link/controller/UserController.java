@@ -3,6 +3,7 @@ package com.chan.link.controller;
 import com.chan.link.dto.LoginDto;
 import com.chan.link.dto.SignDto;
 import com.chan.link.dto.TokenDto;
+import com.chan.link.dto.UserUpdateDto;
 import com.chan.link.jwt.JwtFilter;
 import com.chan.link.jwt.TokenProvider;
 import com.chan.link.service.UserService;
@@ -91,6 +92,26 @@ public class UserController {
         }
     }
 
+    @GetMapping("/update")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
+    public ResponseEntity<UserVO> updateUser(){
+        try {
+            return ResponseEntity.ok(userService.getMyInfo().get());
+        }catch (Exception e){
+            return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("/update")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
+    public ResponseEntity<UserVO> updateUser(UserUpdateDto userUpdateDto){
+
+        UserVO vo = userService.getMyInfo().get();
+        try {
+            return ResponseEntity.ok(userService.userUpdateService(userUpdateDto,vo.getEmail()));
+        }catch (Exception e){
+            return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
+        }
+    }
     @PostMapping(value= "/sign")
     public ResponseEntity<UserVO> userSign(@Valid @RequestBody SignDto signDto) {
         try {

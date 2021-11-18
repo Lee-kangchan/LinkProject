@@ -18,5 +18,4 @@ public interface UserRepository extends JpaRepository<UserVO, Long> {
 
     @EntityGraph(attributePaths = "authorities")  // EAGER 조회
     Optional<UserVO> findOneWithAuthoritiesByEmail(String email);
-
 }
