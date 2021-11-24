@@ -20,47 +20,50 @@ import java.util.Set;
 public class LinkVO {
     @JsonIgnore
     @Id
-    @Column(name = "LINK_SEQ")
+    @Column(name = "linkSeq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long seq; //유저 번호
+    private Long linkSeq; //유저 번호
 
 
-    @Column(name = "LINK_title", length = 100)
+    @Column(name = "linkTitle", length = 100)
     private String title;
 
 
-    @Column(name = "LINK_image", length = 300)
+    @Column(name = "linkImage", length = 300)
     private String image;
 
 
-    @Column(name = "LINK_content", length = 100)
+    @Column(name = "linkContent", length = 100)
     private String content;
 
-    @Column(name = "LINK_secret")
+    @Column(name = "linkSecret")
     private int secret;
 
-    @Column(name = "LINK_recommend")
+    @Column(name = "linkRecommend")
     private int recommend;
 
-    @Column(name = "LINK_create_at")
-    private LocalDateTime create_at;
+    @Column(name= "userSeq")
+    private Long userSeq;
 
-    @Column(name = "LINK_modified_at")
-    private LocalDateTime modified_at;
+    @Column(name = "linkCreateAt")
+    private LocalDateTime createAt;
+
+    @Column(name = "linkModifiedAt")
+    private LocalDateTime modifiedAt;
 
     @ManyToOne(targetEntity=UserVO.class, fetch=FetchType.LAZY) // (1)
-    @JoinColumn(name="Link_seq") // (2)
+    @JoinColumn(name="link_seq") // (2)
     private UserVO user_seq;
 
     @OneToMany(targetEntity = HashTag.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "Link_seq")
+    @JoinColumn(name = "link_seq")
     private Set<HashTag> hashTag;
 
-    @ManyToMany
-    @JoinTable(
-            name = "followlink",
-            joinColumns = {@JoinColumn(name= "link_seq", referencedColumnName = "link_seq")},
-            inverseJoinColumns = {@JoinColumn(name = "user_seq", referencedColumnName =  "user_seq")}
-    )
-    private List<UserVO> followUser;
+//    @ManyToMany
+//    @JoinTable(
+//            name = "followlink",
+//            joinColumns = {@JoinColumn(name= "link_seq", referencedColumnName = "link_seq")},
+//            inverseJoinColumns = {@JoinColumn(name = "user_seq", referencedColumnName =  "user_seq")}
+//    )
+//    private List<UserVO> followUser;
 }
