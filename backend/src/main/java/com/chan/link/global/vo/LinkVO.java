@@ -59,11 +59,4 @@ public class LinkVO {
     @JoinColumn(name = "link_seq")
     private Set<HashTag> hashTag;
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "followlink",
-//            joinColumns = {@JoinColumn(name= "link_seq", referencedColumnName = "link_seq")},
-//            inverseJoinColumns = {@JoinColumn(name = "user_seq", referencedColumnName =  "user_seq")}
-//    )
-//    private List<UserVO> followUser;
 }

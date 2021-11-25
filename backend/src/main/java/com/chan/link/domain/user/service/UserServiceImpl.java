@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService{
             throw new RuntimeException("이미 가입되어 있는 유저입니다.");
         }
         LocalDateTime dateTime = LocalDateTime.now();
-        Authority authority = Authority.builder().authority_name("ROLE_USER").build();
+        Authority authority = Authority.builder().authorityName("ROLE_USER").build();
 
         UserVO user = UserVO.builder().email(signDto.getEmail())
                 .pw(passwordEncoder.encode(signDto.getPw()))
@@ -66,8 +66,8 @@ public class UserServiceImpl implements UserService{
                 .phone(signDto.getPhone())
                 .nickname(signDto.getNickname())
                 .authorities(Collections.singleton(authority))
-                .create_at(dateTime)
-                .modified_at(dateTime)
+                .createAt(dateTime)
+                .modifiedAt(dateTime)
                 .activated(true)
                 .build();
         return userRepository.save(user);
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService{
                 .name(userUpdateDto.getName())
                 .phone(userUpdateDto.getPhone())
                 .nickname(userUpdateDto.getNickname())
-                .modified_at(dateTime)
+                .modifiedAt(dateTime)
                 .build();
         return userRepository.save(user);
     }

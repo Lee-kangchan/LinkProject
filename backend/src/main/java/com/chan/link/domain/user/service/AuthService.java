@@ -50,7 +50,7 @@ public class AuthService implements UserDetailsService {
             throw new RuntimeException(email + " -> 활성화되어 있지 않습니다.");
         }
         List<GrantedAuthority> grantedAuthorities = userVO.getAuthorities().stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getAuthority_name())).collect(Collectors.toList());
+                .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName())).collect(Collectors.toList());
         return new User(userVO.getEmail(), userVO.getPw(), grantedAuthorities);
     }
 

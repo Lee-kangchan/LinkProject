@@ -1,6 +1,6 @@
-package com.chan.link.domain.user.service;
+package com.chan.link.domain.link.service;
 
-import com.chan.link.domain.user.repository.LinkRepository;
+import com.chan.link.domain.link.repository.LinkRepository;
 import com.chan.link.global.vo.LinkVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.chan.link.domain.user.service;
+package com.chan.link.domain.link.service;
 
 import com.chan.link.global.vo.LinkVO;
 
