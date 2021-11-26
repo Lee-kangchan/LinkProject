@@ -4,8 +4,13 @@ import com.chan.link.domain.link.repository.LinkRepository;
 import com.chan.link.global.vo.LinkVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service("LinkService")
@@ -15,9 +20,11 @@ public class LinkServiceImpl implements LinkService{
 
     private final LinkRepository linkRepository;
     @Override
-    public Optional<LinkVO> LinkRecentAll() {
-        linkRepository.findAll();
-        return Optional.empty();
+    public Slice<LinkVO> LinkRecentAll() {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Pageable pageable = PageRequest.of(1,20, Sort.by("linkmodifiedat").descending());
+        Slice<LinkVO> list = linkRepository.findAllByModifiedAtBefore(localDateTime, pageable);
+        return list;
     }
 
     @Override

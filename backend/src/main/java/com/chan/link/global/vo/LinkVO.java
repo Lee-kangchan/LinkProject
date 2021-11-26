@@ -22,7 +22,7 @@ public class LinkVO {
     @Id
     @Column(name = "linkSeq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long linkSeq; //유저 번호
+    private Long linkSeq; //링크 번호
 
 
     @Column(name = "linkTitle", length = 100)
@@ -51,12 +51,12 @@ public class LinkVO {
     @Column(name = "linkModifiedAt")
     private LocalDateTime modifiedAt;
 
-    @ManyToOne(targetEntity=UserVO.class, fetch=FetchType.LAZY) // (1)
-    @JoinColumn(name="link_seq") // (2)
-    private UserVO user_seq;
-
     @OneToMany(targetEntity = HashTag.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "link_seq")
+    @JoinColumn(name = "linkSeq")
     private Set<HashTag> hashTag;
+
+    @Transient
+    private int followCnt;
+
 
 }
