@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface LinkRepository extends JpaRepository<LinkVO, Long> {
     public Slice<LinkVO> findAllByModifiedAtBefore(LocalDateTime modifiedAt, Pageable pageable);
-    public Slice<LinkVO> findAllByModifiedAtAfter(LocalDateTime modifiedAt, Slice<LinkVO> slice); // 일주일동안 상품
+    public Slice<LinkVO> findAllByModifiedAtAfter(LocalDateTime modifiedAt, Pageable pageable); // 일주일동안 상품
 //    public Page<LinkVO> findAllByTitleLikeAndHashTagLikeAndCreate_atAfter(String title, String hashTag, LocalDateTime createAt, Pageable pageable);
     public Slice<LinkVO> findAllByUserSeq(Long seq, Pageable pageable);
 }

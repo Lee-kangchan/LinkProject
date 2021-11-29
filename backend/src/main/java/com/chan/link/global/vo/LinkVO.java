@@ -52,7 +52,7 @@ public class LinkVO {
     private LocalDateTime modifiedAt;
 
     @OneToMany(targetEntity = HashTag.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "linkSeq")
+    @JoinColumn(name = "linkseq")
     private Set<HashTag> hashTag;
 
     @Transient

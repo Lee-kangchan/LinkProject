@@ -1,5 +1,6 @@
 package com.chan.link.domain.link.service;
 
+import com.chan.link.domain.link.dto.PageDto;
 import com.chan.link.domain.link.repository.LinkRepository;
 import com.chan.link.global.vo.LinkVO;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +21,10 @@ public class LinkServiceImpl implements LinkService{
 
     private final LinkRepository linkRepository;
     @Override
-    public Slice<LinkVO> LinkRecentAll() {
+    public Slice<LinkVO> LinkRecentAll(PageDto pageDto) {
         LocalDateTime localDateTime = LocalDateTime.now();
-        Pageable pageable = PageRequest.of(1,20, Sort.by("linkmodifiedat").descending());
-        Slice<LinkVO> list = linkRepository.findAllByModifiedAtBefore(localDateTime, pageable);
+        PageRequest pageRequest = PageRequest.of(1,20, Sort.by("linkmodifiedat").descending());
+        Slice<LinkVO> list = linkRepository.findAllByModifiedAtBefore(localDateTime, pageRequest);
         return list;
     }
 
