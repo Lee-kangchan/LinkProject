@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**", "/favicon.ico");
+        web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**", "/favicon.ico"); // 무시하기
     }
 
     @Override
@@ -59,10 +59,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/user/authenticate").permitAll()
-                .antMatchers("/user/sign").permitAll()
-                .antMatchers("/link/all").permitAll()
-                .antMatchers("/link/best").permitAll()
+                .antMatchers("/user/authenticate").permitAll() //로그인 -> 누구나 접근 가능
+                .antMatchers("/user/sign").permitAll() // 회원가입 -> 누구나 접근 가능
+                .antMatchers("/link/all").permitAll() // 링크 모두 조회 -> 누구나 접근 가능
+                .antMatchers("/link/best").permitAll() // 링크 베스트 조회 -> 누구나 접근 가능
                 .anyRequest().authenticated()
 
                 .and()

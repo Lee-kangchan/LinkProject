@@ -8,10 +8,11 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+//로그인 시 요청 데이터
 public class LoginDto {
     @NotNull
-    private String email;
+    private String email; //이메일
 
     @NotNull
-    private String password;
+    private String password; // 비밀번호
 }

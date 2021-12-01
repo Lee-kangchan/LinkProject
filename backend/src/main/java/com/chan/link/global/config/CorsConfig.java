@@ -7,6 +7,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
+//외부 에서 접근 모두 허용 처리 (서비스 실행 시 보안 설정)
 public class CorsConfig {
 
     @Bean

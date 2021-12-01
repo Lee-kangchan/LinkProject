@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+// 링크 조회한 데이터 (미구현)
 public class FollowLink {
 
     @Id

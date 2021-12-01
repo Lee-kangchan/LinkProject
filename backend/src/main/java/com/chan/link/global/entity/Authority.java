@@ -14,6 +14,7 @@ import javax.persistence.Table;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+//권한 이름 (ROLE_ADMIN, ROLE_USER)
 public class Authority {
     @Id
     @Column(name = "authorityname", length = 50)

@@ -11,8 +11,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<UserVO, Long> {
     UserVO findByEmailAndPw(String email, String pw); // email and password 검증
     Optional<UserVO> findByEmail(String email); // email 체크
-    boolean existsByEmail(String email);
 
     @EntityGraph(attributePaths = "authorities")  // EAGER 조회
-    Optional<UserVO> findOneWithAuthoritiesByEmail(String email);
+    Optional<UserVO> findOneWithAuthoritiesByEmail(String email); // 이메일을 불러와서 권한 알아내기
 }

@@ -61,8 +61,8 @@ public class UserController {
     @GetMapping(value="/all")
     public ResponseEntity<List<UserVO>> userAll(){
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        List<UserVO> listUser = userService.TestUserAll();
+        HttpHeaders httpHeaders = new HttpHeaders(); // 해더 생성
+        List<UserVO> listUser = userService.TestUserAll(); //유저 불러오기
         ResponseEntity<List<UserVO>> response = new ResponseEntity(listUser, httpHeaders, HttpStatus.OK);
         log.info(response.toString());
         return response;
@@ -91,17 +91,9 @@ public class UserController {
         }
     }
 
-    @GetMapping("/update")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
-    public ResponseEntity<UserVO> updateUser(){
-        try {
-            return ResponseEntity.ok(userService.getMyInfo().get());
-        }catch (Exception e){
-            return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
-        }
-    }
     @PostMapping("/update")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
+    //회원 정보 수정 API
     public ResponseEntity<UserVO> updateUser(UserUpdateDto userUpdateDto){
 
         UserVO vo = userService.getMyInfo().get();
@@ -112,6 +104,7 @@ public class UserController {
         }
     }
     @PostMapping(value= "/sign")
+    //회원가입 API
     public ResponseEntity<UserVO> userSign(@Valid @RequestBody SignDto signDto) {
         try {
             return ResponseEntity.ok(userService.signService(signDto));
@@ -121,6 +114,7 @@ public class UserController {
     }
 
     @PostMapping(value="login")
+    //로그인 API
     public ResponseEntity<Boolean> userLogin(@RequestBody UserVO userVO){
         try {
             HttpHeaders httpHeaders = new HttpHeaders();

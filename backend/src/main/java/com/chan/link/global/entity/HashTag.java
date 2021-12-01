@@ -12,12 +12,13 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+//해쉬 태그 정보
 public class HashTag {
     @Id
     @Column(name = "seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long seq;
+    private Long seq; // 번호
 
     @Column(name = "name")
-    private String name;
+    private String name; // 태그 이름
 }

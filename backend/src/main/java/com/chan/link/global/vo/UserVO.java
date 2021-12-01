@@ -55,7 +55,7 @@ public class UserVO {
             joinColumns = {@JoinColumn(name= "userseq", referencedColumnName = "userseq")},
             inverseJoinColumns = {@JoinColumn(name = "authorityname", referencedColumnName =  "authorityname")}
     )
-    private Set<Authority> authorities;
+    private Set<Authority> authorities; // 권한 정보
 
 
 }

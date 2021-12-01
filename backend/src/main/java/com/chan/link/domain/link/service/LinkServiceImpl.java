@@ -51,6 +51,8 @@ public class LinkServiceImpl implements LinkService{
     public LinkVO LinkAdd(LinkDto linkDto, Long userSeq) {
         LocalDateTime localDateTime = LocalDateTime.now();
         Set<HashTag> hashTag = new HashSet<>();
+
+        // HashTag 객체 데이터로 변경하여 리스트 저장
         for(String tag : linkDto.getList()){
             HashTag tagData = HashTag.builder().name(tag).build();
             hashTag.add(tagData);
