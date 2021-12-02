@@ -4,12 +4,15 @@ import com.chan.link.domain.link.dto.LinkDto;
 import com.chan.link.domain.link.dto.PageDto;
 import com.chan.link.domain.link.service.LinkService;
 import com.chan.link.global.jwt.TokenProvider;
+import com.chan.link.global.util.SecurityUtil;
 import com.chan.link.global.vo.LinkVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,7 +38,8 @@ public class LinkController {
     }
     @PostMapping("/user")
     public void linkAdd(LinkDto linkDto){
-
+        String email = SecurityUtil.getCurrentMemberId().toString();
+        linkService.LinkAdd(linkDto, 4L);
     }
 
     @PostMapping("/user/{link}/follow")
