@@ -1,5 +1,6 @@
 package com.chan.link.global.jwt;
 
+import com.chan.link.global.entity.AuthUserEntity;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -17,6 +18,7 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -51,12 +53,17 @@ public class TokenProvider implements InitializingBean {
     public String createToken(Authentication authentication){
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
-
-        long now = (new Date()).getTime();
+        AuthUserEntity authUserEntity = (AuthUserEntity) authentication.getPrincipal();
+        Claims claims = Jwts.claims().setSubject(authUserEntity.getUserEmail());
+        claims.put("userSeq", authUserEntity.getUserSeq());
+        claims.put("userEmail", authUserEntity.getUserEmail());
+        claims.put(AUTHORITY_KEY, authorities);
+        Date date = new Date();
+        long now = (date).getTime();
         Date validity = new Date(now + this.tokenValidityInMilliseconds); // 현재시간부터 유효시간까지
-
-        return Jwts.builder().setSubject(authentication.getName())
-                .claim(AUTHORITY_KEY, authorities)
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(date)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(validity).compact();
     }
@@ -68,8 +75,8 @@ public class TokenProvider implements InitializingBean {
         Collection<? extends GrantedAuthority> authorities = Arrays.stream(claims.get(AUTHORITY_KEY).toString().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
-
-        User principal = new User(claims.getSubject(), "", authorities);
+        Long seq = Long.parseLong(claims.get("userSeq").toString());
+        AuthUserEntity principal = new AuthUserEntity(claims.getSubject(), "",seq, (List<GrantedAuthority>) authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }

@@ -9,6 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@ToString
 //JWT 담길 데이터
 public class AuthUserEntity extends User {
     private Long userSeq;
@@ -19,4 +20,5 @@ public class AuthUserEntity extends User {
         this.userSeq = seq;
         this.userEmail = email;
     }
+
 }

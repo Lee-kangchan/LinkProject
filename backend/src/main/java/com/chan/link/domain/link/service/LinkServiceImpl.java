@@ -53,7 +53,7 @@ public class LinkServiceImpl implements LinkService{
         Set<HashTag> hashTag = new HashSet<>();
 
         // HashTag 객체 데이터로 변경하여 리스트 저장
-        for(String tag : linkDto.getList()){
+        for(String tag : linkDto.getTagList()){
             HashTag tagData = HashTag.builder().name(tag).build();
             hashTag.add(tagData);
         }

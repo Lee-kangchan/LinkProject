@@ -39,7 +39,11 @@ public class LinkController {
     @PostMapping("/user")
     public void linkAdd(LinkDto linkDto){
         String email = SecurityUtil.getCurrentMemberId().toString();
-        linkService.LinkAdd(linkDto, 4L);
+        Long seq = SecurityUtil.getCurrentUserSeq();
+        log.info(email+"");
+        log.info(seq+"");
+
+//        linkService.LinkAdd(linkDto, 4L);
     }
 
     @PostMapping("/user/{link}/follow")
