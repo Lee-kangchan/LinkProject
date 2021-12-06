@@ -50,7 +50,7 @@ public class AuthService implements UserDetailsService {
         List<GrantedAuthority> grantedAuthorities = userVO.getAuthorities().stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
                 .collect(Collectors.toList());
-        return new AuthUserEntity(userVO.getEmail(), userVO.getPw(), userVO.getSeq(),grantedAuthorities);
+        return new AuthUserEntity(userVO.getEmail(), userVO.getPw(), userVO.getId(),grantedAuthorities);
     }
 
 }

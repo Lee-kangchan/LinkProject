@@ -5,14 +5,12 @@ import com.chan.link.domain.link.dto.PageDto;
 import com.chan.link.domain.link.service.LinkService;
 import com.chan.link.global.jwt.TokenProvider;
 import com.chan.link.global.util.SecurityUtil;
-import com.chan.link.global.vo.LinkVO;
+import com.chan.link.global.vo.PostVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,7 +23,7 @@ public class LinkController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @GetMapping("/all")
-    public Slice<LinkVO> linkAllList(PageDto pageDto){
+    public Slice<PostVO> linkAllList(PageDto pageDto){
         return linkService.LinkRecentAll(pageDto);
     }
     @GetMapping("/best")
@@ -37,13 +35,8 @@ public class LinkController {
 
     }
     @PostMapping("/user")
-    public void linkAdd(LinkDto linkDto){
-        String email = SecurityUtil.getCurrentMemberId().toString();
-        Long seq = SecurityUtil.getCurrentUserSeq();
-        log.info(email+"");
-        log.info(seq+"");
-
-//        linkService.LinkAdd(linkDto, 4L);
+    public void linkAdd(@RequestBody LinkDto linkDto){
+        linkService.LinkAdd(linkDto);
     }
 
     @PostMapping("/user/{link}/follow")

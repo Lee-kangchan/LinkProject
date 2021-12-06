@@ -12,12 +12,12 @@ import java.util.List;
 @ToString
 //JWT 담길 데이터
 public class AuthUserEntity extends User {
-    private Long userSeq;
+    private String userId;
     private String userEmail;
 
-    public AuthUserEntity(String email, String pw, Long seq, List<GrantedAuthority> grantedAuthorityList){
+    public AuthUserEntity(String email, String pw, String id, List<GrantedAuthority> grantedAuthorityList){
         super(email, pw, grantedAuthorityList);
-        this.userSeq = seq;
+        this.userId = id;
         this.userEmail = email;
     }
 

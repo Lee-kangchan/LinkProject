@@ -55,7 +55,7 @@ public class TokenProvider implements InitializingBean {
                 .map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
         AuthUserEntity authUserEntity = (AuthUserEntity) authentication.getPrincipal();
         Claims claims = Jwts.claims().setSubject(authUserEntity.getUserEmail());
-        claims.put("userSeq", authUserEntity.getUserSeq());
+        claims.put("userId", authUserEntity.getUserId());
         claims.put("userEmail", authUserEntity.getUserEmail());
         claims.put(AUTHORITY_KEY, authorities);
         Date date = new Date();
@@ -75,7 +75,7 @@ public class TokenProvider implements InitializingBean {
         Collection<? extends GrantedAuthority> authorities = Arrays.stream(claims.get(AUTHORITY_KEY).toString().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
-        Long seq = Long.parseLong(claims.get("userSeq").toString());
+        String seq = claims.get("userId").toString();
         AuthUserEntity principal = new AuthUserEntity(claims.getSubject(), "",seq, (List<GrantedAuthority>) authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);

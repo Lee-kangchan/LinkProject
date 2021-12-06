@@ -1,17 +1,17 @@
 package com.chan.link.domain.link.repository;
 
-import com.chan.link.global.vo.LinkVO;
-import org.springframework.data.domain.Page;
+import com.chan.link.global.vo.PostVO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-public interface LinkRepository extends JpaRepository<LinkVO, Long> {
-    public Slice<LinkVO> findAllByModifiedAtBefore(LocalDateTime modifiedAt, Pageable pageable);
-    public Slice<LinkVO> findAllByModifiedAtAfter(LocalDateTime modifiedAt, Pageable pageable); // 일주일동안 상품
+public interface LinkRepository extends JpaRepository<PostVO, Long> {
+    @Query(value="SELECT * FROM post", nativeQuery = true)
+    public Slice<PostVO> findAllOrderByModifiedDesc(Pageable pageable);
+    public Slice<PostVO> findAllByPostModifiedAtAfter(LocalDateTime post_modified_at, Pageable pageable); // 일주일동안 상품
 //    public Page<LinkVO> findAllByTitleLikeAndHashTagLikeAndCreate_atAfter(String title, String hashTag, LocalDateTime createAt, Pageable pageable);
-    public Slice<LinkVO> findAllByUserSeq(Long seq, Pageable pageable);
+    public Slice<PostVO> findAllByPostUserId(String id, Pageable pageable);
 }

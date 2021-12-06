@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@Table(name = "USER")
+@Table(name = "user")
 @Getter
 @Setter
 @Builder
@@ -20,40 +20,39 @@ import java.util.Set;
 public class UserVO {
     @JsonIgnore
     @Id
-    @Column(name = "userseq")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long seq; //유저 번호
+    @Column(name = "user_id")
+    private String id; //유저 UUID
 
-    @Column(name ="useremail", length = 50, unique = true)
+    @Column(name ="user_email", length = 50, unique = true)
     private String email; // 유저 이메일
 
     @JsonIgnore
-    @Column(name = "userpw", length = 500)
+    @Column(name = "user_pw", length = 500)
     private String pw; // 유저 패스워드
 
 
-    @Column(name = "usergender", length = 10)
+    @Column(name = "user_gender", length = 10)
     private String gender; // 유저 성별
-    @Column(name = "username", length = 10)
+    @Column(name = "user_name", length = 10)
     private String name; // 유저 이름
-    @Column(name = "userphone", length = 10)
+    @Column(name = "user_phone", length = 10)
     private String phone; // 유저 전화번호
-    @Column(name = "usernickname", length = 10)
+    @Column(name = "user_nickname", length = 10)
     private String nickname; // 유저 닉네임
 
     @JsonIgnore
-    @Column(name = "useractivated")
-    private boolean activated;
-    @Column(name = "usercreateat")
+    @Column(name = "user_activated")
+    private boolean activated; // 공개 비공개
+    @Column(name = "user_created_at")
     private LocalDateTime createAt; // 유저 생성일
-    @Column(name = "usermodifiedat")
+    @Column(name = "user_modified_at")
     private LocalDateTime modifiedAt; // 유저 정보 변경일
 
     @ManyToMany
     @JoinTable(
-            name = "userAuthority",
-            joinColumns = {@JoinColumn(name= "userseq", referencedColumnName = "userseq")},
-            inverseJoinColumns = {@JoinColumn(name = "authorityname", referencedColumnName =  "authorityname")}
+            name = "user_authority",
+            joinColumns = {@JoinColumn(name= "user_authority_user_id", referencedColumnName = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_authority_authority_name", referencedColumnName =  "authority_name")}
     )
     private Set<Authority> authorities; // 권한 정보
 

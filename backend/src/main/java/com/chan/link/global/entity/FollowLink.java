@@ -6,7 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "HASHTAG")
+@Table(name = "follow_link")
 @Getter
 @Setter
 @Builder
@@ -16,15 +16,15 @@ import javax.persistence.*;
 public class FollowLink {
 
     @Id
-    @Column(name = "followlinkseq")
+    @Column(name = "follow_link_seq")
     @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long followLinkSeq;
 
-    @Column(name = "userseq")
+    @Column(name = "follow_link_user_seq")
     private Long userSeq;
 
-    @Column(name = "linkseq")
-    private Long linkSeq;
+    @Column(name = "follow_link_post_seq")
+    private Long postSeq;
 
 }

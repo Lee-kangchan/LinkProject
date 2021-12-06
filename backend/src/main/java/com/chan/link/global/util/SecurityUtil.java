@@ -27,15 +27,15 @@ public class SecurityUtil {
     }
 
     //seq만 불러올때 ( Util 메소드를 객체로 담아서 보낼지 따로 보낼 것인지 생각)
-    public static Long getCurrentUserSeq(){
+    public static String getCurrentUserId(){
         final Authentication authentication = SecurityContextHolderGetAuthentication();
-        Long seq = null;
+        String id = null;
         if(authentication.getPrincipal() instanceof AuthUserEntity){
-            seq =  ((AuthUserEntity) authentication.getPrincipal()).getUserSeq();
+            id =  ((AuthUserEntity) authentication.getPrincipal()).getUserId();
         } else if(authentication.getPrincipal() instanceof Long){
-            seq = (Long) authentication.getPrincipal();
+            id = (String) authentication.getPrincipal();
         }
-        return seq;
+        return id;
     }
 
     private static Authentication SecurityContextHolderGetAuthentication(){

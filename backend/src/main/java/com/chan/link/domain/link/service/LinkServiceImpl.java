@@ -4,7 +4,8 @@ import com.chan.link.domain.link.dto.LinkDto;
 import com.chan.link.domain.link.dto.PageDto;
 import com.chan.link.domain.link.repository.LinkRepository;
 import com.chan.link.global.entity.HashTag;
-import com.chan.link.global.vo.LinkVO;
+import com.chan.link.global.util.SecurityUtil;
+import com.chan.link.global.vo.PostVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @Service("LinkService")
 @RequiredArgsConstructor
@@ -24,49 +26,60 @@ public class LinkServiceImpl implements LinkService{
 
     private final LinkRepository linkRepository;
     @Override
-    public Slice<LinkVO> LinkRecentAll(PageDto pageDto) {
+    public Slice<PostVO> LinkRecentAll(PageDto pageDto) {
         LocalDateTime localDateTime = LocalDateTime.now();
-        PageRequest pageRequest = PageRequest.of(1,20, Sort.by("linkmodifiedat").descending());
-        Slice<LinkVO> list = linkRepository.findAllByModifiedAtBefore(localDateTime, pageRequest);
+        PageRequest pageRequest = PageRequest.of(0,20, Sort.by("post_modified_at").descending());
+        Slice<PostVO> list = linkRepository.findAllOrderByModifiedDesc(pageRequest);
+        log.info("최신 순 링크 정보:\n"+ list.getContent());
         return list;
     }
 
     @Override
-    public Optional<LinkVO> LinkBestRecentAll() {
+    public Optional<PostVO> LinkBestRecentAll() {
 
         return Optional.empty();
     }
 
     @Override
-    public Optional<LinkVO> LinkSearch(String search) {
+    public Optional<PostVO> LinkSearch(String search) {
         return Optional.empty();
     }
 
     @Override
-    public Optional<LinkVO> LinkUserAll() {
+    public Optional<PostVO> LinkUserAll() {
         return Optional.empty();
     }
 
     @Override
-    public LinkVO LinkAdd(LinkDto linkDto, Long userSeq) {
+    public PostVO LinkAdd(LinkDto linkDto) {
         LocalDateTime localDateTime = LocalDateTime.now();
         Set<HashTag> hashTag = new HashSet<>();
 
+        // JWT 데이터 불러오기
+        String JwtSaveEmail = SecurityUtil.getCurrentMemberId().toString();
+        String JwtSaveId = SecurityUtil.getCurrentUserId();
+        String uuid = UUID.randomUUID().toString();
+
         // HashTag 객체 데이터로 변경하여 리스트 저장
         for(String tag : linkDto.getTagList()){
-            HashTag tagData = HashTag.builder().name(tag).build();
+            HashTag tagData = HashTag.builder()
+                    .hashtagName(tag)
+                    .postId(uuid)
+                    .build();
             hashTag.add(tagData);
         }
 
-        LinkVO link = LinkVO.builder()
-                .title(linkDto.getTitle())
-                .content(linkDto.getContent())
-                .image(linkDto.getImage())
-                .secret(1)
+        PostVO link = PostVO.builder()
+                .postId(uuid)
+                .postTitle(linkDto.getTitle())
+                .postContent(linkDto.getContent())
+                .postImage(linkDto.getImage())
+                .postSecret(1)
                 .hashTag(hashTag)
-                .createAt(localDateTime)
-                .modifiedAt(localDateTime)
-                .userSeq(userSeq)
+                .postCreateAt(localDateTime)
+                .postModifiedAt(localDateTime)
+                .postUserId(JwtSaveId)
+                .postLink(linkDto.getLink())
                 .build();
 
         linkRepository.save(link);
@@ -74,17 +87,17 @@ public class LinkServiceImpl implements LinkService{
     }
 
     @Override
-    public LinkVO LinkUpdate() {
+    public PostVO LinkUpdate() {
         return null;
     }
 
     @Override
-    public LinkVO LinkDel() {
+    public PostVO LinkDel() {
         return null;
     }
 
     @Override
-    public LinkVO LinkFollow() {
+    public PostVO LinkFollow() {
         return null;
     }
 }

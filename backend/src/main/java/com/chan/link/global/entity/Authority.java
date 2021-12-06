@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Authority")
+@Table(name = "authority")
 @Getter
 @Setter
 @Builder
@@ -17,6 +17,6 @@ import javax.persistence.Table;
 //권한 이름 (ROLE_ADMIN, ROLE_USER)
 public class Authority {
     @Id
-    @Column(name = "authorityname", length = 50)
+    @Column(name = "authority_name", length = 50)
     private String authorityName;
 }

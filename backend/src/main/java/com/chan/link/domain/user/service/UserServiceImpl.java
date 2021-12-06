@@ -56,10 +56,12 @@ public class UserServiceImpl implements UserService{
         if(userRepository.findOneWithAuthoritiesByEmail(signDto.getEmail()).orElse(null) != null){
             throw new RuntimeException("이미 가입되어 있는 유저입니다.");
         }
-        LocalDateTime dateTime = LocalDateTime.now();
+        LocalDateTime dateTime = LocalDateTime.now(); //현재시간 -> created modified 넣기
+        //유저 권한만 로그인
         Authority authority = Authority.builder().authorityName("ROLE_USER").build();
-
-        UserVO user = UserVO.builder().email(signDto.getEmail())
+        String uuid = UUID.randomUUID().toString(); //uuid 생성
+        UserVO user = UserVO.builder().id(uuid)
+                .email(signDto.getEmail())
                 .pw(passwordEncoder.encode(signDto.getPw()))
                 .gender(signDto.getGender())
                 .name(signDto.getName())

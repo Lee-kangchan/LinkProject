@@ -6,7 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "HASHTAG")
+@Table(name = "hashtag")
 @Getter
 @Setter
 @Builder
@@ -15,10 +15,13 @@ import javax.persistence.*;
 //해쉬 태그 정보
 public class HashTag {
     @Id
-    @Column(name = "seq")
+    @Column(name = "hashtag_seq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long seq; // 번호
+    private Long hashtagSeq; // 번호
 
-    @Column(name = "name")
-    private String name; // 태그 이름
+    @Column(name = "hashtag_name")
+    private String hashtagName; // 태그 이름
+
+    @Column(name = "hashtag_post_id")
+    private String postId;
 }
