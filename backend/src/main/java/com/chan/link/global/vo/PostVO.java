@@ -1,6 +1,7 @@
 package com.chan.link.global.vo;
 
 
+import com.chan.link.global.entity.FollowLink;
 import com.chan.link.global.entity.HashTag;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -19,19 +20,16 @@ import java.util.Set;
 @NoArgsConstructor
 // 링크 데이터
 public class PostVO {
-    @JsonIgnore
+//    @JsonIgnore
     @Id
     @Column(name = "post_id")
     private String postId; //링크 UUID
 
-
     @Column(name = "post_title", length = 100)
     private String postTitle; // 링크 제목
 
-
     @Column(name = "post_image", length = 300)
     private String postImage; // 링크 이미지
-
 
     @Column(name = "post_content", length = 100)
     private String postContent; // 링크 내용
@@ -55,10 +53,12 @@ public class PostVO {
     @JoinColumn(name = "hashtag_post_id")
     private Set<HashTag> hashTag; // 해쉬태그 리스트 정보
 
-    @Column(name = "post_link")
-    private String postLink; // 수정일
+    @OneToMany(targetEntity = FollowLink.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name ="follow_link_post_id")
+    private Set<FollowLink> postFollowLink; // 수정일
 
-    @Transient
-    private int followCnt; // 팔로우 수
+    @Column(name = "post_link")
+    private String postLink;
+
 
 }
