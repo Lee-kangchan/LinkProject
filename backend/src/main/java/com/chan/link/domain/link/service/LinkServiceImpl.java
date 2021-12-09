@@ -27,26 +27,38 @@ public class LinkServiceImpl implements LinkService{
     private final LinkRepository linkRepository;
     @Override
     public Slice<PostVO> LinkRecentAll(PageDto pageDto) {
-        LocalDateTime localDateTime = LocalDateTime.now();
         PageRequest pageRequest = PageRequest.of(0,20, Sort.by("post_modified_at").descending());
         Slice<PostVO> list = linkRepository.findAllOrderByModifiedDesc(pageRequest);
-        log.info("최신 순 링크 정보:\n"+ list.getContent());
         return list;
     }
 
     @Override
-    public Optional<PostVO> LinkBestRecentAll() {
-
+    public Optional<PostVO> LinkBestRecentAll(PageDto pageDto) {
+        LocalDateTime localDateTime = LocalDateTime.now().minusDays(7);
+        PageRequest pageRequest = PageRequest.of(0, 20, Sort.by("post_modified_at").descending());
+        Slice<PostVO> list = linkRepository.findAllByPostModifiedAtAfter(localDateTime, pageRequest);
         return Optional.empty();
     }
 
     @Override
-    public Optional<PostVO> LinkSearch(String search) {
+    public Optional<PostVO> LinkHashTagSearch(String tag) {
+        PageRequest pageRequest = PageRequest.of(0, 20, Sort.by("post_modified_at").descending());
+        Slice<PostVO> list = linkRepository.findAllByHashTag(tag, pageRequest);
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<PostVO> LinkTitleSearch(String title) {
+        PageRequest pageRequest = PageRequest.of(0, 20, Sort.by("post_modified_at").descending());
+        Slice<PostVO> list = linkRepository.findAllByPostTitleLike(title, pageRequest);
         return Optional.empty();
     }
 
     @Override
     public Optional<PostVO> LinkUserAll() {
+        String user_id = SecurityUtil.getCurrentUserId();
+        PageRequest pageRequest = PageRequest.of(0, 20, Sort.by("post_modified_at").descending());
+        Slice<PostVO> list = linkRepository.findAllByPostUserId(user_id, pageRequest);
         return Optional.empty();
     }
 

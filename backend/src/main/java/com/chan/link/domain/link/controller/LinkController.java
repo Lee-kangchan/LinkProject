@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.*;
 public class LinkController {
 
     private final LinkService linkService;
-    private final TokenProvider tokenProvider;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @GetMapping("/all")
     public Slice<PostVO> linkAllList(PageDto pageDto){
