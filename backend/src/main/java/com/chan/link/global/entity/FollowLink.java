@@ -1,4 +1,4 @@
-package com.chan.link.entity;
+package com.chan.link.global.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -21,10 +21,10 @@ public class FollowLink {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long followLinkSeq;
 
-    @Column(name = "follow_link_user_seq")
-    private Long userSeq;
+    @Column(name = "follow_link_user_id")
+    private String userId;
 
-    @Column(name = "follow_link_post_seq")
-    private Long postSeq;
+    @Column(name = "follow_link_post_id")
+    private String postId;
 
 }
