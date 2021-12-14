@@ -46,12 +46,19 @@ public class LinkController {
         linkService.LinkAdd(linkDto);
     }
 
-    @PostMapping("/user/{link}/follow")
-    public void linkFollow(@PathVariable String link){
+    @PostMapping("/user/{id}/follow")
+    public void linkFollow(@PathVariable String id){
 
     }
-    @DeleteMapping("/user/{link}")
-    public void linkDelete(@PathVariable String link){
 
+
+    @PutMapping("/user/{id}")
+    public void linkUpdate(@PathVariable String id, LinkDto linkDto){
+        linkService.LinkUpdate(id, linkDto);
+    }
+
+    @DeleteMapping("/user/{id}")
+    public void linkDelete(@PathVariable String id){
+        linkService.LinkDel(id);
     }
 }

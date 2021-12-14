@@ -109,13 +109,14 @@ public class LinkServiceImpl implements LinkService{
     }
 
     @Override
-    public PostVO LinkUpdate() {
-        return null;
+    public PostVO LinkUpdate(String id, LinkDto linkDto) {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        return linkRepository.updateLink(linkDto.getTitle(), linkDto.getContent(), linkDto.getSecret(), localDateTime, id);
     }
 
     @Override
-    public PostVO LinkDel() {
-        return null;
+    public void LinkDel(String id) {
+        linkRepository.deleteAllByPostId(id);
     }
 
     @Override

@@ -15,6 +15,7 @@ public class LinkDto {
     private String title;
     private String image;
     private String content;
+    private int secret;
     private String link;
     private Set<String> tagList;
 }

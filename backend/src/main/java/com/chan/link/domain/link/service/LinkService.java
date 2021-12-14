@@ -16,7 +16,7 @@ public interface LinkService {
     ResponsePostDto  LinkTitleSearch(String title, PageDto pageDto); // link 검색 (title)
     ResponsePostDto  LinkUserAll(PageDto pageDto); // 나의 링크 조회
     PostVO LinkAdd(LinkDto linkDto); // 링크 추가
-    PostVO LinkUpdate(); // 링크 수정
-    PostVO LinkDel(); // 링크 삭제
+    PostVO LinkUpdate(String id, LinkDto linkDto); // 링크 수정
+    void LinkDel(String id); // 링크 삭제
     PostVO LinkFollow(); // 링크 팔로우
 }

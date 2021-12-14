@@ -24,4 +24,14 @@ public interface LinkRepository extends JpaRepository<PostVO, Long> {
     public Slice<PostVO> findAllByHashTag(@Param("tag") String tag, Pageable pageable); // 해쉬태그 검색
     public Slice<PostVO> findAllByPostTitleLike(String title, Pageable pageable); // 제목 like 검색
     public Slice<PostVO> findAllByPostUserId(String id, Pageable pageable); // 포스트
+
+    @Query(value="UPDATE Post p " +
+            "set p.post_title = :title" +
+            ", p.post_content = :content" +
+            ", p.secret = :secret" +
+            ", p.post_modified_at = :modified_at " +
+            "where p.post_id = :id", nativeQuery = true)
+    public PostVO updateLink(String title, String content, int secret, LocalDateTime modified_at, String id);
+    public void deleteAllByPostId(String id);
+
 }
