@@ -1,6 +1,6 @@
-package com.chan.link.global.entity;
+package com.chan.link.global.exception;
 
-import com.chan.link.global.constant.ErrorCode;
+import com.chan.link.global.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

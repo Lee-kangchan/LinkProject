@@ -1,6 +1,5 @@
-package com.chan.link.global.dto;
+package com.chan.link.global.exception;
 
-import com.chan.link.global.constant.ErrorCode;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,6 @@ public class ErrorResponse {
     private final String error;
     private final String code;
     private final String message;
-
     public static ResponseEntity<ErrorResponse> toResponseEntity(ErrorCode errorCode) {
         return ResponseEntity
                 .status(errorCode.getHttpStatus())
