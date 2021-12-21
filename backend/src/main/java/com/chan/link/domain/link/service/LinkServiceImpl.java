@@ -74,36 +74,7 @@ public class LinkServiceImpl implements LinkService{
     * */
     @Override
     public PostVO LinkAdd(LinkDto linkDto) {
-        LocalDateTime localDateTime = LocalDateTime.now();
-        Set<HashTag> hashTag = new HashSet<>();
-
-        // JWT 데이터 불러오기
-        String JwtSaveEmail = SecurityUtil.getCurrentMemberId().toString();
-        String JwtSaveId = SecurityUtil.getCurrentUserId();
-        String uuid = UUID.randomUUID().toString();
-
-        // HashTag 객체 데이터로 변경하여 리스트 저장
-        for(String tag : linkDto.getTagList()){
-            HashTag tagData = HashTag.builder()
-                    .hashtagName(tag)
-                    .postId(uuid)
-                    .build();
-            hashTag.add(tagData);
-        }
-
-        PostVO post = PostVO.builder()
-                .postId(uuid)
-                .postTitle(linkDto.getTitle())
-                .postContent(linkDto.getContent())
-                .postImage(linkDto.getImage())
-                .postSecret(1)
-                .hashTag(hashTag)
-                .postCreateAt(localDateTime)
-                .postModifiedAt(localDateTime)
-                .postUserId(JwtSaveId)
-                .postLink(linkDto.getLink())
-                .build();
-
+        PostVO post = linkDto.toPost(linkDto);
         linkRepository.save(post);
         return null;
     }

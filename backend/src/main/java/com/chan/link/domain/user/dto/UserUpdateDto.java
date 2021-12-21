@@ -1,8 +1,11 @@
 package com.chan.link.domain.user.dto;
 
+import com.chan.link.global.vo.UserVO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -27,4 +30,18 @@ public class UserUpdateDto {
 
     @NotNull
     private String nickname; // 닉네임
+
+    public void UserPasswordEncoder(String pw){
+        this.pw = pw;
+    }
+    public UserVO toUser(UserUpdateDto userUpdateDto){
+        LocalDateTime dateTime = LocalDateTime.now(); //현재시간 -> created modified 넣기
+
+        return UserVO.builder().pw(userUpdateDto.getPw())
+                .name(userUpdateDto.getName())
+                .phone(userUpdateDto.getPhone())
+                .nickname(userUpdateDto.getNickname())
+                .modifiedAt(dateTime)
+                .build();
+    }
 }

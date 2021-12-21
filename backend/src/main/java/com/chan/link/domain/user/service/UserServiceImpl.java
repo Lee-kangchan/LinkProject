@@ -56,22 +56,9 @@ public class UserServiceImpl implements UserService{
         if(userRepository.findOneWithAuthoritiesByEmail(signDto.getEmail()).orElse(null) != null){
             throw new RuntimeException("이미 가입되어 있는 유저입니다.");
         }
-        LocalDateTime dateTime = LocalDateTime.now(); //현재시간 -> created modified 넣기
+        signDto.UserPasswordEncoder(passwordEncoder.encode(signDto.getPw()));
         //유저 권한만 로그인
-        Authority authority = Authority.builder().authorityName("ROLE_USER").build();
-        String uuid = UUID.randomUUID().toString(); //uuid 생성
-        UserVO user = UserVO.builder().id(uuid)
-                .email(signDto.getEmail())
-                .pw(passwordEncoder.encode(signDto.getPw()))
-                .gender(signDto.getGender())
-                .name(signDto.getName())
-                .phone(signDto.getPhone())
-                .nickname(signDto.getNickname())
-                .authorities(Collections.singleton(authority))
-                .createAt(dateTime)
-                .modifiedAt(dateTime)
-                .activated(true)
-                .build();
+        UserVO user = signDto.toUser(signDto);
         return userRepository.save(user);
     }
 
@@ -79,13 +66,8 @@ public class UserServiceImpl implements UserService{
     public UserVO userUpdateService(UserUpdateDto userUpdateDto, String email) {
         LocalDateTime dateTime = LocalDateTime.now();
         UserVO user = userRepository.findByEmail(email).get();
-
-        user = user.builder().pw(passwordEncoder.encode(userUpdateDto.getPw()))
-                .name(userUpdateDto.getName())
-                .phone(userUpdateDto.getPhone())
-                .nickname(userUpdateDto.getNickname())
-                .modifiedAt(dateTime)
-                .build();
+        userUpdateDto.UserPasswordEncoder(passwordEncoder.encode(userUpdateDto.getPw()));
+        user = userUpdateDto.toUser(userUpdateDto);
         return userRepository.save(user);
     }
 
