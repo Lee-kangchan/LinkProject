@@ -41,9 +41,9 @@ public class UserServiceImpl implements UserService{
     public UserVO loginService(UserVO userVO) {
         UserVO login = new UserVO();
         // email 와 pw가 일치하는 db목록 들고오기
-        login = userRepository.findByEmailAndPw(userVO.getEmail(), userVO.getPw());
+        login = userRepository.findByUserEmailAndUserPw(userVO.getUserEmail(), userVO.getUserPw());
 
-        if(login.getEmail().isEmpty()){
+        if(login.getUserEmail().isEmpty()){
             return null;
         }else{
             return login;
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserVO signService(SignDto signDto) {
-        if(userRepository.findOneWithAuthoritiesByEmail(signDto.getEmail()).orElse(null) != null){
+        if(userRepository.findOneWithAuthoritiesByUserEmail(signDto.getEmail()).orElse(null) != null){
             throw new RuntimeException("이미 가입되어 있는 유저입니다.");
         }
         signDto.UserPasswordEncoder(passwordEncoder.encode(signDto.getPw()));
@@ -63,9 +63,10 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserVO userUpdateService(UserUpdateDto userUpdateDto, String email) {
+    public UserVO userUpdateService(UserUpdateDto userUpdateDto) {
         LocalDateTime dateTime = LocalDateTime.now();
-        UserVO user = userRepository.findByEmail(email).get();
+        String userId = SecurityUtil.getCurrentUserId();
+        UserVO user = userRepository.findByUserId(userId);
         userUpdateDto.UserPasswordEncoder(passwordEncoder.encode(userUpdateDto.getPw()));
         user = userUpdateDto.toUser(userUpdateDto);
         return userRepository.save(user);
@@ -74,11 +75,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public boolean emailCheck(String email) {
         UserVO userVO = new UserVO();
-        userRepository.findByEmail(email);
-        userVO = userRepository.findByEmail(email)
+        userRepository.findByUserEmail(email);
+        userVO = userRepository.findByUserEmail(email)
                 .get();
         // Service 처리
-        if(userVO.getEmail().isEmpty()){ // email이 존재하지 않으면 회원가입 처리
+        if(userVO.getUserEmail().isEmpty()){ // email이 존재하지 않으면 회원가입 처리
             userRepository.save(userVO);
             return true;
         } else{ // 아니면 회원가입 안됨
@@ -89,12 +90,12 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional(readOnly = true)
     public Optional<UserVO> getMyInfo() {
-        return SecurityUtil.getCurrentMemberId().flatMap(userRepository::findOneWithAuthoritiesByEmail);
+        return SecurityUtil.getCurrentMemberId().flatMap(userRepository::findOneWithAuthoritiesByUserEmail);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<UserVO> getUserInfo(String email) {
-        return userRepository.findOneWithAuthoritiesByEmail(email);
+        return userRepository.findOneWithAuthoritiesByUserEmail(email);
     }
 }

@@ -32,7 +32,7 @@ public class AuthService implements UserDetailsService {
         log.info("loadUserByUserName ing.. email : " + email);
         try{
 
-            return userRepository.findOneWithAuthoritiesByEmail(email)
+            return userRepository.findOneWithAuthoritiesByUserEmail(email)
                     .map(user -> createUser(email, user))
                     .orElseThrow(() -> new UsernameNotFoundException(email + " -> DB에서 찾을 수 없습니다."));
         }catch (Exception e){
@@ -44,13 +44,13 @@ public class AuthService implements UserDetailsService {
     private AuthUserEntity createUser(String email, UserVO userVO) {
 
         log.info("createUser Method ing.. UserVO : " + userVO.toString());
-        if(!userVO.isActivated()){
+        if(!userVO.isUserActivated()){
             throw new RuntimeException(email + " -> 활성화되어 있지 않습니다.");
         }
         List<GrantedAuthority> grantedAuthorities = userVO.getAuthorities().stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
                 .collect(Collectors.toList());
-        return new AuthUserEntity(userVO.getEmail(), userVO.getPw(), userVO.getId(),grantedAuthorities);
+        return new AuthUserEntity(userVO.getUserEmail(), userVO.getUserPw(), userVO.getUserId(),grantedAuthorities);
     }
 
 }

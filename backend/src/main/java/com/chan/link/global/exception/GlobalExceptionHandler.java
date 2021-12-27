@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         log.error("handleHttpRequestMethodNotSupportedException", e);
 
-        return ErrorResponse.toResponseEntity(ErrorCode.MEMBER_NOT_FOUND);
+        return ErrorResponse.toResponseEntity(ErrorCode.USER_NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class) // 알 수 없는 예외 핸들링

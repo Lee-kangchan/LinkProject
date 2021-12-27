@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface UserService {
     UserVO loginService(UserVO userVO); // Login Service
     UserVO signService(SignDto signDto); // Sign Service
-    UserVO userUpdateService(UserUpdateDto userUpdateDto, String email); // User Update Service
+    UserVO userUpdateService(UserUpdateDto userUpdateDto); // User Update Service
     List<UserVO> TestUserAll(); // User All select Test
     boolean emailCheck(String email); // email check Service
     Optional<UserVO> getMyInfo();

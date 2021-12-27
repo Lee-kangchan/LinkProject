@@ -46,17 +46,17 @@ public class SignDto {
 
         Authority authority = Authority.builder().authorityName("ROLE_USER").build();
         String uuid = UUID.randomUUID().toString(); //uuid 생성
-        return UserVO.builder().id(uuid)
-                .email(signDto.getEmail())
-                .pw(signDto.getPw())
-                .gender(signDto.getGender())
-                .name(signDto.getName())
-                .phone(signDto.getPhone())
-                .nickname(signDto.getNickname())
+        return UserVO.builder().userId(uuid)
+                .userEmail(signDto.getEmail())
+                .userPw(signDto.getPw())
+                .userGender(signDto.getGender())
+                .userName(signDto.getName())
+                .userPhone(signDto.getPhone())
+                .userNickname(signDto.getNickname())
                 .authorities(Collections.singleton(authority))
-                .createAt(dateTime)
-                .modifiedAt(dateTime)
-                .activated(true)
+                .userCreateAt(dateTime)
+                .userModifiedAt(dateTime)
+                .userActivated(true)
                 .build();
     }
 }

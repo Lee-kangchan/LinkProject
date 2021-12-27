@@ -37,11 +37,11 @@ public class UserUpdateDto {
     public UserVO toUser(UserUpdateDto userUpdateDto){
         LocalDateTime dateTime = LocalDateTime.now(); //현재시간 -> created modified 넣기
 
-        return UserVO.builder().pw(userUpdateDto.getPw())
-                .name(userUpdateDto.getName())
-                .phone(userUpdateDto.getPhone())
-                .nickname(userUpdateDto.getNickname())
-                .modifiedAt(dateTime)
+        return UserVO.builder().userPw(userUpdateDto.getPw())
+                .userName(userUpdateDto.getName())
+                .userPhone(userUpdateDto.getPhone())
+                .userNickname(userUpdateDto.getNickname())
+                .userModifiedAt(dateTime)
                 .build();
     }
 }

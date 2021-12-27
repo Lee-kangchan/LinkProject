@@ -96,10 +96,10 @@ public class UserController {
     //회원 정보 수정 API
     public ResponseEntity<UserVO> updateUser(UserUpdateDto userUpdateDto){
 
-        UserVO vo = userService.getMyInfo().get();
         try {
-            return ResponseEntity.ok(userService.userUpdateService(userUpdateDto,vo.getEmail()));
+            return ResponseEntity.ok(userService.userUpdateService(userUpdateDto));
         }catch (Exception e){
+            e.printStackTrace();
             return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
         }
     }
@@ -109,6 +109,7 @@ public class UserController {
         try {
             return ResponseEntity.ok(userService.signService(signDto));
         }catch (Exception e){
+            e.printStackTrace();
             return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
         }
     }
