@@ -27,6 +27,7 @@ public class UserServiceImpl implements UserService{
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserVO> TestUserAll() {
         List<UserVO> listUserVO = new ArrayList<>();
         // 모든 user정보를 불러온다 -> forEach로 list에 하나하나 값을 하나 씩 넣는다
@@ -66,16 +67,15 @@ public class UserServiceImpl implements UserService{
     public UserVO userUpdateService(UserUpdateDto userUpdateDto) {
         LocalDateTime dateTime = LocalDateTime.now();
         String userId = SecurityUtil.getCurrentUserId();
-        UserVO user = userRepository.findByUserId(userId);
+        UserVO user = userRepository.findByUserId(userId).get();
         userUpdateDto.UserPasswordEncoder(passwordEncoder.encode(userUpdateDto.getPw()));
-        user = userUpdateDto.toUser(userUpdateDto);
+        userUpdateDto.toUser(user, userUpdateDto);
         return userRepository.save(user);
     }
 
     @Override
     public boolean emailCheck(String email) {
         UserVO userVO = new UserVO();
-        userRepository.findByUserEmail(email);
         userVO = userRepository.findByUserEmail(email)
                 .get();
         // Service 처리

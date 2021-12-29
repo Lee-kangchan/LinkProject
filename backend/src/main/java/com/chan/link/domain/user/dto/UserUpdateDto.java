@@ -34,10 +34,10 @@ public class UserUpdateDto {
     public void UserPasswordEncoder(String pw){
         this.pw = pw;
     }
-    public UserVO toUser(UserUpdateDto userUpdateDto){
+    public void toUser(UserVO user, UserUpdateDto userUpdateDto){
         LocalDateTime dateTime = LocalDateTime.now(); //현재시간 -> created modified 넣기
 
-        return UserVO.builder().userPw(userUpdateDto.getPw())
+        user.builder().userPw(userUpdateDto.getPw())
                 .userName(userUpdateDto.getName())
                 .userPhone(userUpdateDto.getPhone())
                 .userNickname(userUpdateDto.getNickname())
