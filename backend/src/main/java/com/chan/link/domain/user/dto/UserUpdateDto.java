@@ -34,14 +34,14 @@ public class UserUpdateDto {
     public void UserPasswordEncoder(String pw){
         this.pw = pw;
     }
-    public void toUser(UserVO user, UserUpdateDto userUpdateDto){
+    public UserVO toUser(UserVO user){
         LocalDateTime dateTime = LocalDateTime.now(); //현재시간 -> created modified 넣기
-
-        user.builder().userPw(userUpdateDto.getPw())
-                .userName(userUpdateDto.getName())
-                .userPhone(userUpdateDto.getPhone())
-                .userNickname(userUpdateDto.getNickname())
-                .userModifiedAt(dateTime)
-                .build();
+        user.setUserPw(pw);
+        user.setUserPhone(phone);
+        user.setUserName(name);
+        user.setUserGender(gender);
+        user.setUserNickname(nickname);
+        user.setUserModifiedAt(dateTime);
+        return user;
     }
 }

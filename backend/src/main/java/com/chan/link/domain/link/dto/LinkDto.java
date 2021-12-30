@@ -25,7 +25,7 @@ public class LinkDto {
     private Set<String> tagList;
 
     public PostVO toPost(LinkDto linkDto) {
-        String JwtSaveId = SecurityUtil.getCurrentUserId();
+        String JwtSaveId = SecurityUtil.getCurrentUserId().get();
         String uuid = UUID.randomUUID().toString();
         LocalDateTime localDateTime = LocalDateTime.now();
         Set<HashTag> hashTag = new HashSet<>();

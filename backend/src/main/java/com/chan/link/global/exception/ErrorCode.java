@@ -41,7 +41,7 @@ public enum ErrorCode {
     /* 400 error */
     EMAIL_DUPLICATION(HttpStatus.BAD_REQUEST, "중복된 이메일 입니다."),
     CANNOT_FOLLOW_MYSELF(HttpStatus.BAD_REQUEST, "자기 자신은 팔로우 할 수 없습니다"),
-
+    USER_ALREADY_SIGN(HttpStatus.BAD_REQUEST, "이미 가입되어 있는 유저입니다."),
     /* 404 error */
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다"),
     REFRESH_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "로그아웃 된 사용자입니다"),

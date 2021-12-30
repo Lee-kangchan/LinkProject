@@ -11,7 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -38,24 +40,11 @@ public class UserServiceImpl implements UserService{
         return listUserVO;
     }
 
-    @Override
-    public UserVO loginService(UserVO userVO) {
-        UserVO login = new UserVO();
-        // email 와 pw가 일치하는 db목록 들고오기
-        login = userRepository.findByUserEmailAndUserPw(userVO.getUserEmail(), userVO.getUserPw());
-
-        if(login.getUserEmail().isEmpty()){
-            return null;
-        }else{
-            return login;
-        }
-    }
-
 
     @Override
     public UserVO signService(SignDto signDto) {
         if(userRepository.findOneWithAuthoritiesByUserEmail(signDto.getEmail()).orElse(null) != null){
-            throw new RuntimeException("이미 가입되어 있는 유저입니다.");
+            throw new RuntimeException();
         }
         signDto.UserPasswordEncoder(passwordEncoder.encode(signDto.getPw()));
         //유저 권한만 로그인
@@ -66,10 +55,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserVO userUpdateService(UserUpdateDto userUpdateDto) {
         LocalDateTime dateTime = LocalDateTime.now();
-        String userId = SecurityUtil.getCurrentUserId();
-        UserVO user = userRepository.findByUserId(userId).get();
+        UserVO user = SecurityUtil.getCurrentUserId().flatMap(userRepository::findByUserId)
+            .orElseThrow(() -> new RuntimeException());
         userUpdateDto.UserPasswordEncoder(passwordEncoder.encode(userUpdateDto.getPw()));
-        userUpdateDto.toUser(user, userUpdateDto);
+        user = userUpdateDto.toUser(user);
+        log.info(user.toString());
         return userRepository.save(user);
     }
 

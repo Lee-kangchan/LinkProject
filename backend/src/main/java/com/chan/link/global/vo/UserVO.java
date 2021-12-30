@@ -14,6 +14,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @DynamicUpdate // 변경한 필드만 대응

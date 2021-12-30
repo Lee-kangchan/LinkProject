@@ -27,7 +27,7 @@ public class SecurityUtil {
     }
 
     //seq만 불러올때 ( Util 메소드를 객체로 담아서 보낼지 따로 보낼 것인지 생각)
-    public static String getCurrentUserId(){
+    public static Optional<String> getCurrentUserId(){
         final Authentication authentication = SecurityContextHolderGetAuthentication();
         String id = null;
         if(authentication.getPrincipal() instanceof AuthUserEntity){
@@ -35,7 +35,7 @@ public class SecurityUtil {
         } else if(authentication.getPrincipal() instanceof Long){
             id = (String) authentication.getPrincipal();
         }
-        return id;
+        return Optional.ofNullable(id);
     }
 
     private static Authentication SecurityContextHolderGetAuthentication(){

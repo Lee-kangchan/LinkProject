@@ -62,7 +62,7 @@ public class LinkServiceImpl implements LinkService{
 
     @Override
     public ResponsePostDto  LinkUserAll(PageDto pageDto) {
-        String user_id = SecurityUtil.getCurrentUserId();
+        String user_id = SecurityUtil.getCurrentUserId().get();
         PageRequest pageRequest = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.by("post_modified_at").descending());
         Slice<PostVO> list = linkRepository.findAllByPostUserId(user_id, pageRequest);
         return new ResponsePostDto().builder().postVO(list.getContent()).pageDto(pageDto).build();

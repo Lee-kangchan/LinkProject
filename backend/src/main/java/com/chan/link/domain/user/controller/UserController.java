@@ -35,7 +35,7 @@ public class UserController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
 
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginDto loginDto){
         log.info("POST : authenticate " + loginDto.getEmail() + " pw :" + loginDto.getPassword() );
         //파라미터 email, pw를 이용하여 토큰 생성
@@ -111,22 +111,6 @@ public class UserController {
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @PostMapping(value="login")
-    //로그인 API
-    public ResponseEntity<Boolean> userLogin(@RequestBody UserVO userVO){
-        try {
-            HttpHeaders httpHeaders = new HttpHeaders();
-            ResponseEntity<Boolean> response = new ResponseEntity(userService.loginService(userVO), httpHeaders, HttpStatus.OK);
-
-            return response;
-        }
-        catch(Exception e){
-            e.printStackTrace();
-            return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
-
         }
     }
 

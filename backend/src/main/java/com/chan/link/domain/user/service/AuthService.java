@@ -31,7 +31,6 @@ public class AuthService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) {
         log.info("loadUserByUserName ing.. email : " + email);
         try{
-
             return userRepository.findOneWithAuthoritiesByUserEmail(email)
                     .map(user -> createUser(email, user))
                     .orElseThrow(() -> new UsernameNotFoundException(email + " -> DB에서 찾을 수 없습니다."));
