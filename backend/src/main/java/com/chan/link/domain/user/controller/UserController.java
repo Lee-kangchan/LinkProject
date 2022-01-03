@@ -1,9 +1,7 @@
 package com.chan.link.domain.user.controller;
 
-import com.chan.link.domain.user.dto.LoginDto;
-import com.chan.link.domain.user.dto.SignDto;
 import com.chan.link.domain.user.dto.TokenDto;
-import com.chan.link.domain.user.dto.UserUpdateDto;
+import com.chan.link.domain.user.dto.UserDto;
 import com.chan.link.global.jwt.JwtFilter;
 import com.chan.link.global.jwt.TokenProvider;
 import com.chan.link.domain.user.service.UserService;
@@ -36,7 +34,7 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginDto loginDto){
+    public ResponseEntity<TokenDto> authorize(@Valid @RequestBody UserDto.Login loginDto){
         log.info("POST : authenticate " + loginDto.getEmail() + " pw :" + loginDto.getPassword() );
         //파라미터 email, pw를 이용하여 토큰 생성
         UsernamePasswordAuthenticationToken authenticationToken =
@@ -94,7 +92,7 @@ public class UserController {
     @PostMapping("/update")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     //회원 정보 수정 API
-    public ResponseEntity<UserVO> updateUser(UserUpdateDto userUpdateDto){
+    public ResponseEntity<UserVO> updateUser(UserDto.Update userUpdateDto){
 
         try {
             return ResponseEntity.ok(userService.userUpdateService(userUpdateDto));
@@ -105,7 +103,7 @@ public class UserController {
     }
     @PostMapping(value= "/sign")
     //회원가입 API
-    public ResponseEntity<UserVO> userSign(@Valid @RequestBody SignDto signDto) {
+    public ResponseEntity<UserVO> userSign(@Valid @RequestBody UserDto.Sign signDto) {
         try {
             return ResponseEntity.ok(userService.signService(signDto));
         }catch (Exception e){

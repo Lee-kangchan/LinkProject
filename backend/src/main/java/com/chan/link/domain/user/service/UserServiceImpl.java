@@ -1,8 +1,6 @@
 package com.chan.link.domain.user.service;
 
-import com.chan.link.domain.user.dto.SignDto;
-import com.chan.link.domain.user.dto.UserUpdateDto;
-import com.chan.link.global.entity.Authority;
+import com.chan.link.domain.user.dto.UserDto;
 import com.chan.link.domain.user.repository.UserRepository;
 import com.chan.link.global.util.SecurityUtil;
 import com.chan.link.global.vo.UserVO;
@@ -11,9 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 
-import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -42,18 +38,18 @@ public class UserServiceImpl implements UserService{
 
 
     @Override
-    public UserVO signService(SignDto signDto) {
+    public UserVO signService(UserDto.Sign signDto) {
         if(userRepository.findOneWithAuthoritiesByUserEmail(signDto.getEmail()).orElse(null) != null){
             throw new RuntimeException();
         }
         signDto.UserPasswordEncoder(passwordEncoder.encode(signDto.getPw()));
         //유저 권한만 로그인
-        UserVO user = signDto.toUser(signDto);
+        UserVO user = signDto.toUser();
         return userRepository.save(user);
     }
 
     @Override
-    public UserVO userUpdateService(UserUpdateDto userUpdateDto) {
+    public UserVO userUpdateService(UserDto.Update userUpdateDto) {
         LocalDateTime dateTime = LocalDateTime.now();
         UserVO user = SecurityUtil.getCurrentUserId().flatMap(userRepository::findByUserId)
             .orElseThrow(() -> new RuntimeException());
