@@ -10,6 +10,7 @@ public interface UserService {
     UserVO signService(UserDto.Sign signDto); // Sign Service
     UserVO userUpdateService(UserDto.Update userUpdateDto); // User Update Service
     List<UserVO> TestUserAll(); // User All select Test
+    String tokenGenerationService(UserDto.Login loginDto);
     boolean emailCheck(String email); // email check Service
     Optional<UserVO> getMyInfo();
     Optional<UserVO> getUserInfo(String email);

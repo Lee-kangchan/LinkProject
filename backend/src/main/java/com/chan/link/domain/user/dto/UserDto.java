@@ -18,7 +18,7 @@ public class UserDto {
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     //로그인 시 요청 데이터
-    public class Login {
+    public static class Login {
         private String email; //이메일
         private String password; // 비밀번호
     }
@@ -28,7 +28,7 @@ public class UserDto {
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     //회원가입 데이터
-    public class Sign {
+    public static class Sign {
         private String email; //이메일
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         private String pw; //비밀번호
@@ -65,7 +65,7 @@ public class UserDto {
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     //유저 업데이트 데이터
-    public class Update {
+    public static class Update {
 
         @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         private String pw; //비밀번호

@@ -2,10 +2,16 @@ package com.chan.link.domain.user.service;
 
 import com.chan.link.domain.user.dto.UserDto;
 import com.chan.link.domain.user.repository.UserRepository;
+import com.chan.link.global.jwt.TokenProvider;
 import com.chan.link.global.util.SecurityUtil;
 import com.chan.link.global.vo.UserVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +29,8 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    private final TokenProvider tokenProvider;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @Override
     @Transactional(readOnly = true)
@@ -36,6 +44,22 @@ public class UserServiceImpl implements UserService{
         return listUserVO;
     }
 
+    @Override
+    public String tokenGenerationService(UserDto.Login loginDto) {
+
+        try {
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
+
+            //토큰을 이용해서 Authentication 객체를 생성 authenticate 가 실행 될 때 loadUserByUsername 이 실행
+            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return tokenProvider.createToken(authentication);
+        }
+        catch (BadCredentialsException e){
+             throw new BadCredentialsException("");
+        }
+    }
 
     @Override
     public UserVO signService(UserDto.Sign signDto) {

@@ -1,12 +1,18 @@
 package com.chan.link.domain.user.service;
 
+import com.chan.link.domain.user.dto.UserDto;
 import com.chan.link.domain.user.repository.UserRepository;
 import com.chan.link.global.entity.AuthUserEntity;
+import com.chan.link.global.jwt.TokenProvider;
 import com.chan.link.global.vo.UserVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -39,16 +45,17 @@ public class AuthService implements UserDetailsService {
             return null;
         }
     }
-
     private AuthUserEntity createUser(String email, UserVO userVO) {
 
         log.info("createUser Method ing.. UserVO : " + userVO.toString());
         if(!userVO.isUserActivated()){
             throw new RuntimeException(email + " -> 활성화되어 있지 않습니다.");
         }
+        log.info("authorities check");
         List<GrantedAuthority> grantedAuthorities = userVO.getAuthorities().stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
                 .collect(Collectors.toList());
+        log.info("return AuthUserEntity");
         return new AuthUserEntity(userVO.getUserEmail(), userVO.getUserPw(), userVO.getUserId(),grantedAuthorities);
     }
 

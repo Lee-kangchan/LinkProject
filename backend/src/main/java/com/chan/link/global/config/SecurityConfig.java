@@ -59,6 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
+                .antMatchers("/user/login").permitAll() //로그인 -> 누구나 접근 가능
                 .antMatchers("/user/authenticate").permitAll() //로그인 -> 누구나 접근 가능
                 .antMatchers("/user/sign").permitAll() // 회원가입 -> 누구나 접근 가능
                 .antMatchers("/link/all").permitAll() // 링크 모두 조회 -> 누구나 접근 가능

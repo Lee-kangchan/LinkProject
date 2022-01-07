@@ -3,6 +3,7 @@ package com.chan.link.global.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,13 +22,6 @@ public class GlobalExceptionHandler {
         return ErrorResponse.toResponseEntity(ErrorCode.DUPLICATE_RESOURCE);
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    protected  ResponseEntity<ErrorResponse> handleRuntimeException(){
-        log.error("runtimeException : {}", ErrorCode.USER_ALREADY_SIGN);
-
-        return ErrorResponse.toResponseEntity(ErrorCode.USER_ALREADY_SIGN);
-    }
-
     @ExceptionHandler(UserPrincipalNotFoundException.class)
     protected  ResponseEntity<ErrorResponse> handleUserPrincipalNotFoundException(){
         log.error("runtimeException : {}", ErrorCode.USER_NOT_FOUND);
@@ -35,6 +29,12 @@ public class GlobalExceptionHandler {
         return ErrorResponse.toResponseEntity(ErrorCode.USER_NOT_FOUND);
     }
 
+    @ExceptionHandler(BadCredentialsException.class)
+    protected  ResponseEntity<ErrorResponse> handleBadCredentialsException(){
+        log.error("BadCredentialsException : {}", ErrorCode.USER_PASSWORD_FAIL);
+
+        return ErrorResponse.toResponseEntity(ErrorCode.USER_PASSWORD_FAIL);
+    }
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         log.error("handleHttpRequestMethodNotSupportedException", e);
