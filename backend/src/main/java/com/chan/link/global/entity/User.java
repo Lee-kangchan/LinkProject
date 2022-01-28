@@ -1,6 +1,5 @@
-package com.chan.link.global.vo;
+package com.chan.link.global.entity;
 
-import com.chan.link.global.entity.Authority;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
@@ -18,7 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @DynamicUpdate // 변경한 필드만 대응
-public class UserVO {
+public class User {
     @Id
     @Column(name = "user_id")
     private String userId; //유저 UUID

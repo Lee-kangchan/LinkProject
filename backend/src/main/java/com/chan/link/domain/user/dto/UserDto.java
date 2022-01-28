@@ -1,9 +1,8 @@
 package com.chan.link.domain.user.dto;
 
 import com.chan.link.global.entity.Authority;
-import com.chan.link.global.vo.UserVO;
+import com.chan.link.global.entity.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sun.istack.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -39,12 +38,12 @@ public class UserDto {
         public void UserPasswordEncoder(String pw){
             this.pw = pw;
         }
-        public UserVO toUser(){
+        public User toUser(){
             LocalDateTime dateTime = LocalDateTime.now(); //현재시간 -> created modified 넣기
             //유저 권한만 로그인
             Authority authority = Authority.builder().authorityName("ROLE_USER").build();
             String uuid = UUID.randomUUID().toString(); //uuid 생성
-            return UserVO.builder().userId(uuid)
+            return User.builder().userId(uuid)
                     .userEmail(email)
                     .userPw(pw)
                     .userGender(gender)
@@ -76,7 +75,7 @@ public class UserDto {
         public void UserPasswordEncoder(String pw){
             this.pw = pw;
         }
-        public UserVO toUser(UserVO user){
+        public User toUser(User user){
             LocalDateTime dateTime = LocalDateTime.now(); //현재시간 -> created modified 넣기
             user.setUserPw(pw);
             user.setUserPhone(phone);

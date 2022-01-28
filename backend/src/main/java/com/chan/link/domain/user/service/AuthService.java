@@ -1,19 +1,12 @@
 package com.chan.link.domain.user.service;
 
-import com.chan.link.domain.user.dto.UserDto;
 import com.chan.link.domain.user.repository.UserRepository;
 import com.chan.link.global.entity.AuthUserEntity;
-import com.chan.link.global.jwt.TokenProvider;
-import com.chan.link.global.vo.UserVO;
+import com.chan.link.global.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,7 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component("UserDetailsService")
@@ -45,7 +37,7 @@ public class AuthService implements UserDetailsService {
             return null;
         }
     }
-    private AuthUserEntity createUser(String email, UserVO userVO) {
+    private AuthUserEntity createUser(String email, User userVO) {
 
         log.info("createUser Method ing.. UserVO : " + userVO.toString());
         if(!userVO.isUserActivated()){

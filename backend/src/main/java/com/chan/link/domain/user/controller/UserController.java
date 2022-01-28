@@ -5,17 +5,14 @@ import com.chan.link.domain.user.dto.UserDto;
 import com.chan.link.global.jwt.JwtFilter;
 import com.chan.link.global.jwt.TokenProvider;
 import com.chan.link.domain.user.service.UserService;
-import com.chan.link.global.vo.UserVO;
+import com.chan.link.global.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -48,18 +45,18 @@ public class UserController {
     }
 
     @GetMapping(value="/all")
-    public ResponseEntity<List<UserVO>> userAll(){
+    public ResponseEntity<List<User>> userAll(){
 
         HttpHeaders httpHeaders = new HttpHeaders(); // 해더 생성
-        List<UserVO> listUser = userService.TestUserAll(); //유저 불러오기
-        ResponseEntity<List<UserVO>> response = new ResponseEntity(listUser, httpHeaders, HttpStatus.OK);
+        List<User> listUser = userService.TestUserAll(); //유저 불러오기
+        ResponseEntity<List<User>> response = new ResponseEntity(listUser, httpHeaders, HttpStatus.OK);
         log.info(response.toString());
         return response;
     }
 
     @GetMapping("/")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
-    public ResponseEntity<UserVO> getMyUserInfo(){
+    public ResponseEntity<User> getMyUserInfo(){
         log.info("getMyInfo : " );
 
         try {
@@ -71,7 +68,7 @@ public class UserController {
 
     @GetMapping("/{email}/")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<UserVO> getUserInfo(@PathVariable String email){
+    public ResponseEntity<User> getUserInfo(@PathVariable String email){
         log.info("getUserInfo : " + email);
         try {
             return ResponseEntity.ok(userService.getUserInfo(email).get());
@@ -83,7 +80,7 @@ public class UserController {
     @PostMapping("/update")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     //회원 정보 수정 API
-    public ResponseEntity<UserVO> updateUser(UserDto.Update userUpdateDto){
+    public ResponseEntity<User> updateUser(UserDto.Update userUpdateDto){
 
         try {
             return ResponseEntity.ok(userService.userUpdateService(userUpdateDto));
@@ -94,7 +91,7 @@ public class UserController {
     }
     @PostMapping(value= "/sign")
     //회원가입 API
-    public ResponseEntity<UserVO> userSign(@Valid @RequestBody UserDto.Sign signDto) {
+    public ResponseEntity<User> userSign(@Valid @RequestBody UserDto.Sign signDto) {
         try {
             return ResponseEntity.ok(userService.signService(signDto));
         }catch (Exception e){

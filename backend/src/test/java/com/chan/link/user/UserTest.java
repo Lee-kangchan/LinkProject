@@ -3,13 +3,11 @@ package com.chan.link.user;
 import com.chan.link.domain.user.dto.UserDto;
 import com.chan.link.domain.user.repository.UserRepository;
 import com.chan.link.domain.user.service.UserService;
-import com.chan.link.global.vo.UserVO;
+import com.chan.link.global.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -54,7 +52,7 @@ public class UserTest {
     // null을 해야 처리 될까 ? isEmpty로 처리를 해야 될까?
     @Test
     void isEmptyTest() {
-        UserVO vo2 = new UserVO();
+        User vo2 = new User();
     }
 
     @Test

@@ -3,12 +3,11 @@ package com.chan.link.domain.link.dto;
 
 import com.chan.link.global.entity.HashTag;
 import com.chan.link.global.util.SecurityUtil;
-import com.chan.link.global.vo.PostVO;
+import com.chan.link.global.entity.Post;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -24,7 +23,7 @@ public class LinkDto {
     private String link;
     private Set<String> tagList;
 
-    public PostVO toPost(LinkDto linkDto) {
+    public Post toPost(LinkDto linkDto) {
         String JwtSaveId = SecurityUtil.getCurrentUserId().get();
         String uuid = UUID.randomUUID().toString();
         LocalDateTime localDateTime = LocalDateTime.now();
@@ -39,7 +38,7 @@ public class LinkDto {
             hashTag.add(tagData);
         }
 
-        return PostVO.builder()
+        return Post.builder()
                 .postId(uuid)
                 .postTitle(linkDto.getTitle())
                 .postContent(linkDto.getContent())

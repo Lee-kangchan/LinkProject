@@ -1,6 +1,6 @@
 package com.chan.link.domain.link.dto;
 
-import com.chan.link.global.vo.PostVO;
+import com.chan.link.global.entity.Post;
 import lombok.*;
 
 import java.util.List;
@@ -13,5 +13,5 @@ import java.util.List;
 @NoArgsConstructor
 public class ResponsePostDto {
     private PageDto pageDto;
-    private List<PostVO> postVO;
+    private List<Post> postVO;
 }

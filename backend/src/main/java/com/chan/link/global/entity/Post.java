@@ -1,14 +1,10 @@
-package com.chan.link.global.vo;
+package com.chan.link.global.entity;
 
 
-import com.chan.link.global.entity.FollowLink;
-import com.chan.link.global.entity.HashTag;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,7 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 // 링크 데이터
-public class PostVO {
+public class Post {
 //    @JsonIgnore
     @Id
     @Column(name = "post_id")

@@ -4,9 +4,8 @@ import com.chan.link.domain.link.dto.LinkDto;
 import com.chan.link.domain.link.dto.PageDto;
 import com.chan.link.domain.link.dto.ResponsePostDto;
 import com.chan.link.domain.link.repository.LinkRepository;
-import com.chan.link.global.entity.HashTag;
 import com.chan.link.global.util.SecurityUtil;
-import com.chan.link.global.vo.PostVO;
+import com.chan.link.global.entity.Post;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -15,10 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
 
 @Service("LinkService")
 @RequiredArgsConstructor
@@ -35,28 +30,28 @@ public class LinkServiceImpl implements LinkService{
     @Override
     public ResponsePostDto LinkRecentAll(PageDto pageDto) {
         PageRequest pageRequest = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.by("post_modified_at").descending());
-        Slice<PostVO> list = linkRepository.findAllOrderByModifiedDesc(pageRequest);
+        Slice<Post> list = linkRepository.findAllOrderByModifiedDesc(pageRequest);
         return new ResponsePostDto().builder().postVO(list.getContent()).pageDto(pageDto).build();
     }
     @Override
     public ResponsePostDto LinkBestRecentAll(PageDto pageDto) {
         LocalDateTime localDateTime = LocalDateTime.now().minusDays(7);
         PageRequest pageRequest = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.by("post_modified_at").descending());
-        Slice<PostVO> list = linkRepository.findAllByPostModifiedAtAfter(localDateTime, pageRequest);
+        Slice<Post> list = linkRepository.findAllByPostModifiedAtAfter(localDateTime, pageRequest);
         return new ResponsePostDto().builder().postVO(list.getContent()).pageDto(pageDto).build();
     }
 
     @Override
     public ResponsePostDto  LinkHashTagSearch(String tag, PageDto pageDto) {
         PageRequest pageRequest = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.by("post_modified_at").descending());
-        Slice<PostVO> list = linkRepository.findAllByHashTag(tag, pageRequest);
+        Slice<Post> list = linkRepository.findAllByHashTag(tag, pageRequest);
         return new ResponsePostDto().builder().postVO(list.getContent()).pageDto(pageDto).build();
     }
 
     @Override
     public ResponsePostDto  LinkTitleSearch(String title, PageDto pageDto) {
         PageRequest pageRequest = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.by("post_modified_at").descending());
-        Slice<PostVO> list = linkRepository.findAllByPostTitleLike(title, pageRequest);
+        Slice<Post> list = linkRepository.findAllByPostTitleLike(title, pageRequest);
         return new ResponsePostDto().builder().postVO(list.getContent()).pageDto(pageDto).build();
     }
 
@@ -64,7 +59,7 @@ public class LinkServiceImpl implements LinkService{
     public ResponsePostDto  LinkUserAll(PageDto pageDto) {
         String user_id = SecurityUtil.getCurrentUserId().get();
         PageRequest pageRequest = PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.by("post_modified_at").descending());
-        Slice<PostVO> list = linkRepository.findAllByPostUserId(user_id, pageRequest);
+        Slice<Post> list = linkRepository.findAllByPostUserId(user_id, pageRequest);
         return new ResponsePostDto().builder().postVO(list.getContent()).pageDto(pageDto).build();
     }
 
@@ -73,14 +68,14 @@ public class LinkServiceImpl implements LinkService{
     * INSERT UPDATE DELETE SERVICE
     * */
     @Override
-    public PostVO LinkAdd(LinkDto linkDto) {
-        PostVO post = linkDto.toPost(linkDto);
+    public Post LinkAdd(LinkDto linkDto) {
+        Post post = linkDto.toPost(linkDto);
         linkRepository.save(post);
         return null;
     }
 
     @Override
-    public PostVO LinkUpdate(String id, LinkDto linkDto) {
+    public Post LinkUpdate(String id, LinkDto linkDto) {
         LocalDateTime localDateTime = LocalDateTime.now();
         return linkRepository.updateLink(linkDto.getTitle(), linkDto.getContent(), linkDto.getSecret(), localDateTime, id);
     }
@@ -91,7 +86,7 @@ public class LinkServiceImpl implements LinkService{
     }
 
     @Override
-    public PostVO LinkFollow() {
+    public Post LinkFollow() {
         return null;
     }
 }

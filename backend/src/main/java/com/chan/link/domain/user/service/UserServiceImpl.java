@@ -4,7 +4,7 @@ import com.chan.link.domain.user.dto.UserDto;
 import com.chan.link.domain.user.repository.UserRepository;
 import com.chan.link.global.jwt.TokenProvider;
 import com.chan.link.global.util.SecurityUtil;
-import com.chan.link.global.vo.UserVO;
+import com.chan.link.global.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -34,8 +34,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<UserVO> TestUserAll() {
-        List<UserVO> listUserVO = new ArrayList<>();
+    public List<User> TestUserAll() {
+        List<User> listUserVO = new ArrayList<>();
         // 모든 user정보를 불러온다 -> forEach로 list에 하나하나 값을 하나 씩 넣는다
         userRepository.findAll().forEach(e-> {
             log.info(e.toString());
@@ -62,20 +62,20 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserVO signService(UserDto.Sign signDto) {
+    public User signService(UserDto.Sign signDto) {
         if(userRepository.findOneWithAuthoritiesByUserEmail(signDto.getEmail()).orElse(null) != null){
             throw new RuntimeException();
         }
         signDto.UserPasswordEncoder(passwordEncoder.encode(signDto.getPw()));
         //유저 권한만 로그인
-        UserVO user = signDto.toUser();
+        User user = signDto.toUser();
         return userRepository.save(user);
     }
 
     @Override
-    public UserVO userUpdateService(UserDto.Update userUpdateDto) {
+    public User userUpdateService(UserDto.Update userUpdateDto) {
         LocalDateTime dateTime = LocalDateTime.now();
-        UserVO user = SecurityUtil.getCurrentUserId().flatMap(userRepository::findByUserId)
+        User user = SecurityUtil.getCurrentUserId().flatMap(userRepository::findByUserId)
             .orElseThrow(() -> new RuntimeException());
         userUpdateDto.UserPasswordEncoder(passwordEncoder.encode(userUpdateDto.getPw()));
         user = userUpdateDto.toUser(user);
@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public boolean emailCheck(String email) {
-        UserVO userVO = new UserVO();
+        User userVO = new User();
         userVO = userRepository.findByUserEmail(email)
                 .get();
         // Service 처리
@@ -99,13 +99,13 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<UserVO> getMyInfo() {
+    public Optional<User> getMyInfo() {
         return SecurityUtil.getCurrentMemberId().flatMap(userRepository::findOneWithAuthoritiesByUserEmail);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<UserVO> getUserInfo(String email) {
+    public Optional<User> getUserInfo(String email) {
         return userRepository.findOneWithAuthoritiesByUserEmail(email);
     }
 }
